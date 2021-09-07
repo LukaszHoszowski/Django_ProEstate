@@ -23,7 +23,7 @@ Django based App for real estate management.
 
 + fulfill system variables with Secret key and Postgres DB credentials
 
-* App can be contenerized in the future
+* App can be containerized in the future
 
 ### Executing program
 
