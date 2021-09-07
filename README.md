@@ -31,7 +31,7 @@ python manage.py runserver
 
 ## Authors
 
-Contributors names and contact info
+Contributors and contact info
 
 Łukasz Hoszowski  
 [@Spl](spl@g.pl)
