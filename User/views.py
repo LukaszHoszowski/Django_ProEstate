@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
@@ -44,3 +46,8 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     success_url = reverse_lazy('signup')
+
+
+class MainView(View):
+    def get(self, request):
+        return render(request, 'main.html')
