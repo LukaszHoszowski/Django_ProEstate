@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}proEstate - Rejestracja użytkownika{% endblock title %}
+{% block title %}proEstate - Zmiana hasła użytkownika{% endblock title %}
 
 {% block content %}
-    <h2>Rejestracja użytkownika</h2>
+    <h2>Zmiana hasła użytkownika</h2>
     <br>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <br><br>
-        <button type="submit">Zarejestruj</button>
+        <button type="submit">Zapisz</button>
         <br><br>
 {#        <a href="{% url 'home' %}">Home</a>#}
     </form>

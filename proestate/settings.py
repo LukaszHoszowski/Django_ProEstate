@@ -14,6 +14,8 @@ import os
 
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
@@ -150,3 +152,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = reverse_lazy('signup')
+LOGOUT_REDIRECT_URL = reverse_lazy('signup')
