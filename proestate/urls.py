@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-from User.views import SignUpView, ProfileCreateView, UpdatePassword, UserLoginView, UserLogoutView, MainView
+from User.views import SignUpView, ProfileCreateView, UpdatePassword, UserLoginView, UserLogoutView, MainView, \
+    ProfileView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -8,6 +9,7 @@ urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/signup/', SignUpView.as_view(), name='signup'),
     path('accounts/profile_creation/', ProfileCreateView.as_view(), name='profile_create'),
+    path('accounts/profile/', ProfileView.as_view(), name='profile'),
     path('accounts/login/', UserLoginView.as_view(), name='user_login'),
     path('accounts/logout/', UserLogoutView.as_view(), name='user_logout'),
     path('accounts/pass_change/', UpdatePassword.as_view(), name='pass_change'),

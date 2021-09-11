@@ -53,8 +53,7 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="{% static 'sticky-footer-navbar.css' %} rel=" stylesheet
-    ">
+    <link href="{% static 'sticky-footer-navbar.css' %} rel=" stylesheet>
 </head>
 <body class="d-flex flex-column h-100">
 
@@ -62,7 +61,7 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="https://getbootstrap.com/docs/5.0/examples/sticky-footer-navbar/#">
+            <a class="navbar-brand" href="{% url 'main' %}">
                 <img src="https://www.svgrepo.com/show/3504/big-building.svg" alt="" width="60" height="60"
                      class="d-inline-block align-middle">
 
@@ -84,22 +83,23 @@
                     {#                    </li>#}
                 </ul>
                 {% if user.is_authenticated %}
-{#                    {% url 'profile' %}#}
-{#                    <a href=""#}
-{#                       class="link-secondary">{{ user.first_name|title }} {{ user.last_name|title }}</a>#}
+                    {#                    {% url 'profile' %}#}
+                    {#                    <a href=""#}
+                    {#                       class="link-secondary">{{ user.first_name|title }} {{ user.last_name|title }}</a>#}
 
-                            <li class="nav-item dropdown align-middle">
-                                <a class="nav-link dropdown-toggle link-secondary align-middle" href="#" id="navbarDarkDropdownMenuLink"
-                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ user.first_name|title }} {{ user.last_name|title }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-dark"
-                                    aria-labelledby="navbarDarkDropdownMenuLink">
-                                    <li><a class="dropdown-item" href="#">Profil</a></li>
-                                    <li><a class="dropdown-item" href="#">Modyfikuj profil</a></li>
-                                    <li><a class="dropdown-item text-danger" href="{% url 'pass_change' %}">Zmień hasło</a></li>
-                                </ul>
-                            </li>
+                    <li class="nav-item dropdown align-middle">
+                        <a class="nav-link dropdown-toggle link-secondary align-middle" href="#"
+                           id="navbarDarkDropdownMenuLink"
+                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.first_name|title }} {{ user.last_name|title }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark"
+                            aria-labelledby="navbarDarkDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profil</a></li>
+                            <li><a class="dropdown-item" href="#">Modyfikuj profil</a></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'pass_change' %}">Zmień hasło</a></li>
+                        </ul>
+                    </li>
 
                     <div class="px-3"></div>
                     <a href="{% url 'user_logout' %}">
@@ -146,66 +146,52 @@
 {#    </div>#}
 {#</footer>#}
 
-<footer class="footer mt-auto py-3 bg-light">
-<div class="container text-secondary">
-   <div class="row">
-      <div class="col-md-6">
-         <div class="row">
+<footer class="footer mt-auto py-6 bg-light">
+    <div class="container text-secondary">
+        <div class="row">
             <div class="col-md-6">
-{#               <div class="logo-part">#}
-                  <p><b>proEstate</b></p>
-                   <p>Wiejska 6</p>
-                   <p>Warszawa</p>
-                   <p>50-518</p>
-{#               </div>#}
+                <div class="row">
+                    <div class="col-md-6">
+                        {#               <div class="logo-part">#}
+                        <p><b>proEstate</b></p>
+                        Wiejska 6 <br>
+                        Warszawa <br>
+                        50-518 <br>
+                        {#               </div>#}
+                    </div>
+                    <div class="col-md-6 px-4">
+                        <h6>Dowiedz się o nas więcej</h6>
+                        <br>
+                        <a href="#" class="btn-footer link-dark"> O firmie </a><br>
+                        <br>
+                        <a href="#" class="btn-footer link-dark"> Napisz do nas</a>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6 px-4">
-                <h6>Dowiedz się o nas więcej</h6>
-                <br>
-                <a href="#" class="btn-footer link-dark"> O firmie </a><br>
-                <br>
-                <a href="#" class="btn-footer link-dark"> Napisz do nas</a>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-7 px-4">
+                        <h6>Telefony alarmowe</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>997 Policja</li>
+                                    <li>998 Straż</li>
+                                    <li>999 Pogotowie</li>
+                                    <li>112 Alarmowy</li>
+                                    <li>992 Gazowe</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6 px-4">
+                                <h2><a href="mailto:pro3state@gmail.com" class="link-dark">Współpraca</a></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-         </div>
-      </div>
-      <div class="col-md-6">
-         <div class="row">
-            <div class="col-md-6 px-4">
-               <h6>Help us</h6>
-               <div class="row ">
-                  <div class="col-md-6">
-                     <ul>
-                        <li> <a href="#" class="link-dark">Home</a> </li>
-                        <li> <a href="#">About</a> </li>
-                        <li> <a href="#">Service</a> </li>
-                        <li> <a href="#">Team</a> </li>
-                     </ul>
-                  </div>
-                  <div class="col-md-6 px-4">
-                     <ul>
-                        <li> <a href="#">Cab Faciliy</a> </li>
-                        <li> <a href="#">Fax</a> </li>
-                        <li> <a href="#">Terms</a> </li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-            <div class="col-md-6 ">
-               <h6>Newsletter</h6>
-               <div class="social">
-                  <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                  <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-               </div>
-               <form class="form-footer my-3">
-                  <input type="text"  placeholder="search here...." name="search">
-                  <input type="button" value="Go" >
-               </form>
-               <p>That's technology limitation of LCD monitors</p>
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
+        </div>
+    </div>
 </footer>
 
 

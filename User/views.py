@@ -3,10 +3,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView, ListView
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from User.forms import SignUpForm, ProfileForm
+from User.models import Profile
 
 
 class SignUpView(CreateView):
@@ -30,13 +31,20 @@ class UpdatePassword(LoginRequiredMixin, PasswordChangeView):
 
 class ProfileCreateView(LoginRequiredMixin, CreateView):
     form_class = ProfileForm
-    success_url = reverse_lazy('signup')
+    success_url = reverse_lazy('profile')
     template_name = 'profile_create.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+
+class ProfileView(LoginRequiredMixin, ListView):
+    model = Profile
+    template_name = 'profile_view.html'
+
+    def get_queryset(self):
+        return Profile.objects.filter(user=self.request.user)
 
 class UserLoginView(LoginView):
     form_class = AuthenticationForm
