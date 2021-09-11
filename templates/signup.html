@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}proEstate - Rejestracja użytkownika{% endblock title %}
+
+{% block content %}
+    <h2>Rejestracja użytkownika</h2>
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br><br>
+        <input class="btn btn-secondary" type="submit" value="Zarejestruj">
+        <br><br>
+{#        <a href="{% url 'home' %}">Home</a>#}
+    </form>
+{% endblock content %}

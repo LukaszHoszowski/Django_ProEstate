@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}proEstate - Logowanie użytkownika{% endblock title %}
+
+{% block content %}
+    <h2>Logowanie użytkownika</h2>
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br><br>
+        <input class="btn btn-secondary" type="submit" value="Zaloguj się">
+        <br><br>
+{#        <a href="{% url 'home' %}">Home</a>#}
+    </form>
+{% endblock content %}

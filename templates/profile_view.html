@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}proEstate - Profil{% endblock title %}
+
+{% block content %}
+    <h2>Twój profil</h2>
+    <br>
+        <ul>
+        {% for publisher in object_list %}
+            <li>{{ publisher.building }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

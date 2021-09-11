@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}proEstate - Zmiana hasła użytkownika{% endblock title %}
+
+{% block content %}
+    <h2>Zmiana hasła użytkownika</h2>
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br><br>
+        <input class="btn btn-secondary" type="submit" value="Zmień">
+        <br><br>
+{#        <a href="{% url 'home' %}">Home</a>#}
+    </form>
+{% endblock content %}
