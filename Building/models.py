@@ -8,6 +8,8 @@ class Building(models.Model):
     city = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=6)
     no_of_flats = models.PositiveIntegerField()
+    building_picture = models.ImageField(upload_to='images/')
+    roof_keys_keeper = models.ForeignKey('User', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.street} {self.building_no}'
