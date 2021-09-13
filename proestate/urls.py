@@ -1,17 +1,14 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from User.views import SignUpView, ProfileCreateView, UpdatePassword, UserLoginView, UserLogoutView, MainView, \
-    ProfileView
+
+from User.views import MainView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', MainView.as_view(), name='main'),
-    # path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/signup/', SignUpView.as_view(), name='signup'),
-    path('accounts/profile_creation/', ProfileCreateView.as_view(), name='profile_create'),
-    path('accounts/profile/', ProfileView.as_view(), name='profile'),
-    path('accounts/login/', UserLoginView.as_view(), name='user_login'),
-    path('accounts/logout/', UserLogoutView.as_view(), name='user_logout'),
-    path('accounts/pass_change/', UpdatePassword.as_view(), name='pass_change'),
+    path('accounts/', include('User.urls')),
+    path('buildings/', include('Building.urls')),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

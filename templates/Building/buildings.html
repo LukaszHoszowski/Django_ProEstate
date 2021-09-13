@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}proEstate - Budynki{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            {% for building in buildings %}
+                <div class="col-sm">
+                    <div class="text-center fw-bold">{{ building|upper }}</div>
+                    <br>
+                    <a href="{% url 'Building:building_details' slug=building.slug %}" class="link-secondary">
+                    <img src="{{ building.building_picture.url }}" class="rounded-3 float img-fluid" style="height: 200px" alt="budynek">
+                    </a>
+                    <br>
+                    <br>
+                    <div class="text-left"><i>Wspólnota: </i>  <b>{{ building.housing_cooperative }}</b></div>
+                    <div class="text-left"><i>Miasto: </i>  <b>{{ building.city }}</b></div>
+                    <div class="text-left"><i>Kod: </i>  <b>{{ building.zip_code }}</b></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+    <div class="container align-content-center">
+        <div class="row align-content-center">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <div class="pagination container align-content-center">
+                    <span class="step-links align-content-center">
+                        {% if page_obj.has_previous %}
+                            {#                    <a href="?page=1">&laquo; pierwsza</a>#}
+                            <a href="?page={{ page_obj.previous_page_number }}">&laquo; poprzednia </a>
+                        {% endif %}
+                    <span class="current align-content-center">
+                        Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
+                    </span>
+                        {% if page_obj.has_next %}
+                            {#                    <a href="?page={{ page_obj.paginator.num_pages }}">ostatnia &raquo;</a>#}
+                            <a href="?page={{ page_obj.next_page_number }}"> następna &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

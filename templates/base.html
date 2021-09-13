@@ -95,22 +95,22 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark"
                             aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'User:profile' %}">Profil</a></li>
                             <li><a class="dropdown-item" href="#">Modyfikuj profil</a></li>
-                            <li><a class="dropdown-item text-danger" href="{% url 'pass_change' %}">Zmień hasło</a></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'User:pass_change' %}">Zmień hasło</a></li>
                         </ul>
                     </li>
 
                     <div class="px-3"></div>
-                    <a href="{% url 'user_logout' %}">
+                    <a href="{% url 'User:user_logout' %}">
                         <button class="px-3 btn btn-outline-danger nav-item>">Wyloguj</button>
                     </a>
                 {% else %}
-                    <a href="{% url 'user_login' %}">
+                    <a href="{% url 'User:user_login' %}">
                         <button class="px-3 btn btn-outline-success nav-item">Zaloguj</button>
                     </a>
                     <div class="px-3"></div>
-                    <a href="{% url 'signup' %}">
+                    <a href="{% url 'User:signup' %}">
                         <button class="px-3 btn btn-outline-info nav-item">Zarejestruj</button>
                     </a>
                 {% endif %}
