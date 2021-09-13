@@ -3,7 +3,6 @@ from Building.models import Building, Cartography, HousingCooperative
 
 
 class BuildingAdmin(admin.ModelAdmin):
-    list_display = ('street',)
     prepopulated_fields = {'slug': ('street', 'building_no')}
 
 

@@ -9,7 +9,9 @@
                 <div class="col-sm">
                     <div class="text-center fw-bold">{{ building|upper }}</div>
                     <br>
+                    <a href="{% url 'Building:building_details' slug=building.slug %}" class="link-secondary">
                     <img src="{{ building.building_picture.url }}" class="rounded-3 float img-fluid" style="height: 200px" alt="budynek">
+                    </a>
                     <br>
                     <br>
                     <div class="text-left"><i>Wspólnota: </i>  <b>{{ building.housing_cooperative }}</b></div>
