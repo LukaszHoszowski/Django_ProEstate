@@ -1,3 +1,12 @@
 from django.contrib import admin
+from Building.models import Building, Cartography, HousingCooperative
 
-# Register your models here.
+
+class BuildingAdmin(admin.ModelAdmin):
+    list_display = ('street',)
+    prepopulated_fields = {'slug': ('street', 'building_no')}
+
+
+admin.site.register(Building, BuildingAdmin)
+admin.site.register(Cartography)
+admin.site.register(HousingCooperative)
