@@ -4,6 +4,8 @@
 
 {% block content %}
 
-    {{ building.slug }}
+    {% for flat in building.flat_set.all %}
+       {{ flat.flat_no }}
+    {% endfor %}
 
 {% endblock content %}

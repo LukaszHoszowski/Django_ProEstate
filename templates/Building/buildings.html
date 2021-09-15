@@ -10,13 +10,14 @@
                     <div class="text-center fw-bold">{{ building|upper }}</div>
                     <br>
                     <a href="{% url 'Building:building_details' slug=building.slug %}" class="link-secondary">
-                    <img src="{{ building.building_picture.url }}" class="rounded-3 float img-fluid" style="height: 200px" alt="budynek">
+                        <img src="{{ building.building_picture.url }}" class="rounded-3 float img-fluid"
+                             style="height: 200px" alt="budynek">
                     </a>
                     <br>
                     <br>
-                    <div class="text-left"><i>Wspólnota: </i>  <b>{{ building.housing_cooperative }}</b></div>
-                    <div class="text-left"><i>Miasto: </i>  <b>{{ building.city }}</b></div>
-                    <div class="text-left"><i>Kod: </i>  <b>{{ building.zip_code }}</b></div>
+                    <div class="text-left"><i>Wspólnota: </i> <b>{{ building.housing_cooperative }}</b></div>
+                    <div class="text-left"><i>Miasto: </i> <b>{{ building.city }}</b></div>
+                    <div class="text-left"><i>Kod: </i> <b>{{ building.zip_code }}</b></div>
                 </div>
             {% endfor %}
         </div>
@@ -26,7 +27,6 @@
     <br>
     <br>
     <br>
-
 
     <div class="container align-content-center">
         <div class="row align-content-center">
@@ -39,7 +39,7 @@
                             {#                    <a href="?page=1">&laquo; pierwsza</a>#}
                             <a href="?page={{ page_obj.previous_page_number }}">&laquo; poprzednia </a>
                         {% endif %}
-                    <span class="current align-content-center">
+                        <span class="current align-content-center">
                         Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
                     </span>
                         {% if page_obj.has_next %}

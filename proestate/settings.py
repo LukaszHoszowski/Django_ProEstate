@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     #local
     'User',
     'Building',
+    'Flat',
 ]
 
 MIDDLEWARE = [

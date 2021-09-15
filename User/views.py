@@ -12,7 +12,7 @@ from User.models import Profile
 
 class SignUpView(CreateView):
     form_class = SignUpForm
-    success_url = reverse_lazy('profile_create')
+    success_url = reverse_lazy('Building:buildings')
     template_name = 'User/signup.html'
 
     def form_valid(self, form):

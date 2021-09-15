@@ -14,6 +14,22 @@ class Building(models.Model):
                                             verbose_name='Wspólnota/zarządca')
     slug = models.SlugField(null=False, unique=True)
 
+    def generate_flats(self):
+        from Flat.models import Flat
+        for flat_no in range(self.no_of_flats):
+            Flat.objects.create(number=flat_no + 1, building=self)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        creation = self.id is None
+        super().save(force_insert, force_update, using,
+                     update_fields)
+        if creation:
+            self.generate_flats()
+
+    class Meta:
+        ordering = ('street', 'building_no')
+
     def __str__(self):
         return f'{self.street} {self.building_no}'
 
@@ -70,6 +86,5 @@ class HousingCooperative(models.Model):
     class Meta:
         verbose_name = 'Wspólnota/Zarządca'
         verbose_name_plural = 'Wspólnoty/Zarządcy'
-
 
 # https://mapy.geoportal.gov.pl/imap/Imgp_2.html?identifyParcel=026401_1.0022.AR_28.87/14
