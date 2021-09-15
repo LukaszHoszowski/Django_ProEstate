@@ -2,6 +2,31 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
+NUMBER_SUFFIX = [
+    ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'), ('G', 'G'), ('H', 'H'), ('I', 'I'),
+    ('J', 'J'), ('K', 'K'), ('L', 'L'), ('M', 'M')
+]
+
+PARCEL_PRECINCTS = [
+    (1, 'Północ'),
+    (2, 'Południe'),
+    (3, 'Zachód'),
+    (4, 'Wschód'),
+]
+
+OWNERSHIP_TYPES = [
+    (1, 'Pełna własność'),
+    (2, 'Spółdzielcze'),
+    (3, 'Komunalne'),
+]
+
+HEATING_TYPES = [
+    (1, 'CO'),
+    (2, 'Gazowe'),
+    (3, 'Elektryczne'),
+    (4, 'Węglowe'),
+]
+
 
 class Building(models.Model):
     street = models.CharField(max_length=100, verbose_name='Ulica')
@@ -15,7 +40,6 @@ class Building(models.Model):
     slug = models.SlugField(null=False, unique=True)
 
     def generate_flats(self):
-        from Flat.models import Flat
         for flat_no in range(self.no_of_flats):
             Flat.objects.create(number=flat_no + 1, building=self)
 
@@ -39,14 +63,6 @@ class Building(models.Model):
     class Meta:
         verbose_name = 'Budynek'
         verbose_name_plural = 'Budynki'
-
-
-PARCEL_PRECINCTS = [
-    (1, 'Północ'),
-    (2, 'Południe'),
-    (3, 'Zachód'),
-    (4, 'Wschód'),
-]
 
 
 class Cartography(models.Model):
@@ -86,5 +102,31 @@ class HousingCooperative(models.Model):
     class Meta:
         verbose_name = 'Wspólnota/Zarządca'
         verbose_name_plural = 'Wspólnoty/Zarządcy'
+
+
+class Flat(models.Model):
+    number = models.PositiveIntegerField(verbose_name='Nr mieszkania')
+    number_suffix = models.CharField(max_length=1, null=True, blank=True, default=None, verbose_name='Suffix',
+                                     choices=NUMBER_SUFFIX)
+    area = models.PositiveIntegerField(verbose_name='Powierzchnia w m2', null=True, blank=True)
+    floor = models.SmallIntegerField(verbose_name='Piętro', null=True, blank=True)
+    ownership_type = models.SmallIntegerField(choices=OWNERSHIP_TYPES, verbose_name='Typ własności', default=1)
+    heating_type = models.SmallIntegerField(choices=HEATING_TYPES, verbose_name='Typ ogrzewania', default=1)
+    natural_gas = models.BooleanField(default=True, verbose_name='Gaz')
+    electricity = models.BooleanField(default=True, verbose_name='Prąd')
+    water = models.BooleanField(default=True, verbose_name='Woda')
+    water_heating = models.BooleanField(default=True, verbose_name='Podgrzewanie wody z CO')
+    building = models.ForeignKey(Building, on_delete=models.CASCADE, verbose_name='Budynek')
+    user = models.ManyToManyField(User, blank=True, verbose_name='Mieszkańcy')
+
+    def __str__(self):
+        return f'{self.building}/{self.number}{self.number_suffix if self.number_suffix else ""}'
+
+    # def get_absolute_url(self):
+    #     return reverse('flat_detail', kwargs={'slug': self.slug})
+
+    class Meta:
+        verbose_name = 'Mieszkanie'
+        verbose_name_plural = 'Mieszkania'
 
 # https://mapy.geoportal.gov.pl/imap/Imgp_2.html?identifyParcel=026401_1.0022.AR_28.87/14
