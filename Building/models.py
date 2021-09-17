@@ -53,16 +53,14 @@ class Building(models.Model):
 
     class Meta:
         ordering = ('street', 'building_no')
+        verbose_name = 'Budynek'
+        verbose_name_plural = 'Budynki'
 
     def __str__(self):
         return f'{self.street} {self.building_no}'
 
     def get_absolute_url(self):
         return reverse('building_detail', kwargs={'slug': self.slug})
-
-    class Meta:
-        verbose_name = 'Budynek'
-        verbose_name_plural = 'Budynki'
 
 
 class Cartography(models.Model):

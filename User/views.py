@@ -12,7 +12,7 @@ from User.models import Profile
 
 class SignUpView(CreateView):
     form_class = SignUpForm
-    success_url = reverse_lazy('Building:buildings')
+    success_url = reverse_lazy('User:profile_create')
     template_name = 'User/signup.html'
 
     def form_valid(self, form):
@@ -25,13 +25,13 @@ class SignUpView(CreateView):
 
 class UpdatePassword(LoginRequiredMixin, PasswordChangeView):
     form_class = PasswordChangeForm
-    success_url = reverse_lazy('signup')
+    success_url = reverse_lazy('User:signup')
     template_name = 'User/change_pass.html'
 
 
 class ProfileCreateView(LoginRequiredMixin, CreateView):
     form_class = ProfileForm
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('User:profile')
     template_name = 'User/profile_create.html'
 
     def form_valid(self, form):
@@ -49,7 +49,7 @@ class ProfileView(LoginRequiredMixin, ListView):
 
 class UserLoginView(LoginView):
     form_class = AuthenticationForm
-    success_url = reverse_lazy('signup')
+    success_url = reverse_lazy('User:signup')
     template_name = 'User/login.html'
 
 
