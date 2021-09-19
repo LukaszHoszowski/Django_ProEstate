@@ -6,13 +6,13 @@ from django.views import View
 from django.views.generic import CreateView, FormView, ListView
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
-from User.forms import SignUpForm, ProfileForm
+from User.forms import SignUpForm, ProfileFormBuilding, ProfileFormFlat
 from User.models import Profile
 
 
 class SignUpView(CreateView):
     form_class = SignUpForm
-    success_url = reverse_lazy('User:profile_create')
+    success_url = reverse_lazy('User:profile_create_building')
     template_name = 'User/signup.html'
 
     def form_valid(self, form):
@@ -29,10 +29,20 @@ class UpdatePassword(LoginRequiredMixin, PasswordChangeView):
     template_name = 'User/change_pass.html'
 
 
-class ProfileCreateView(LoginRequiredMixin, CreateView):
-    form_class = ProfileForm
+class ProfileCreateBuildingView(LoginRequiredMixin, CreateView):
+    form_class = ProfileFormBuilding
+    success_url = reverse_lazy('User:profile_create_flat')
+    template_name = 'User/profile_create_building.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class ProfileCreateFlatView(LoginRequiredMixin, CreateView):
+    form_class = ProfileFormFlat
     success_url = reverse_lazy('User:profile')
-    template_name = 'User/profile_create.html'
+    template_name = 'User/profile_create_flat.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user

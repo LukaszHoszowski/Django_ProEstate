@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
+from Building.models import Building
 from User.models import Profile
 
 
@@ -28,7 +29,24 @@ class SignUpForm(UserCreationForm):
         ]
 
 
-class ProfileForm(forms.ModelForm):
+class ProfileFormBuilding(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user']
+        exclude = ['user', 'flat', 'is_verified', 'token', 'created']
+        labels = {
+            'building': 'Budynek',
+            'phoneNumber': 'Nr telefonu',
+        }
+
+
+class ProfileFormFlat(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ['user', 'building', 'is_verified', 'token', 'created', 'phoneNumber']
+        labels = {
+            'flat': 'Mieszkanie',
+        }
+
+        def __init__(self, request, *args, **kwargs):
+            super(ProfileFormFlat, self).__init__(*args, **kwargs)
+            self.fields['flat'].queryset = Profile.objects.filter(user=request.user)

@@ -12,7 +12,7 @@ class Profile(models.Model):
     flat = models.ManyToManyField(Flat, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
-    token = models.CharField(max_length=100, default=None)
+    token = models.CharField(max_length=100, default=None, blank=True, null=True)
 
     # def get_absolute_url(self):
     #     return reverse('author-detail', kwargs={'pk': self.pk})
