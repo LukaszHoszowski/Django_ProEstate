@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from Building.models import Building
+from Building.models import Building, Flat
 from User.models import Profile
 
 
@@ -29,24 +29,38 @@ class SignUpForm(UserCreationForm):
         ]
 
 
+class ProfileFormAdditional(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ['user', 'flat', 'is_verified', 'token', 'created', 'building']
+        labels = {
+            'phoneNumber': 'Nr telefonu',
+            'contact_flag': '',
+        }
+        help_texts = {
+            'contact_flag': """Czy wyrażasz zgodę na udostępnianie Twoich informacji kontaktowych innym mieszkańcom. 
+            Jeśli nie wyrazisz zgody, nikt nie będzie mógł Cie poinformować o awariach i innych zdarzeniach."""
+        }
+
+
 class ProfileFormBuilding(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user', 'flat', 'is_verified', 'token', 'created']
+        exclude = ['user', 'flat', 'is_verified', 'token', 'created', 'contact_flag', 'phoneNumber']
         labels = {
             'building': 'Budynek',
-            'phoneNumber': 'Nr telefonu',
         }
 
 
 class ProfileFormFlat(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user', 'building', 'is_verified', 'token', 'created', 'phoneNumber']
+        exclude = ['user', 'building', 'is_verified', 'token', 'created', 'phoneNumber', 'contact_flag']
         labels = {
             'flat': 'Mieszkanie',
         }
 
-        def __init__(self, request, *args, **kwargs):
-            super(ProfileFormFlat, self).__init__(*args, **kwargs)
-            self.fields['flat'].queryset = Profile.objects.filter(user=request.user)
+    def __init__(self, *args, buildings=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if buildings is not None:
+            self.fields['flat'].queryset = Flat.objects.filter(building__id__in=buildings)

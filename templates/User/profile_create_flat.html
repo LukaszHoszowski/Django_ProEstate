@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}proEstate - Tworzenie profilu{% endblock title %}
 
 {% block content %}
-    <h2>Tworzenie profilu 2/2</h2>
+    <h2>Tworzenie profilu 3/3</h2>
     <br>
     <h6>Wybierz swój lokal</h6>
     <br>
-    <form method="post">
+    <form method="post" action="">
         {% csrf_token %}
         {{ form.as_p }}
         <br><br>

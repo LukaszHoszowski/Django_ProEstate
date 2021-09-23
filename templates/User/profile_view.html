@@ -1,13 +1,31 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}proEstate - Profil{% endblock title %}
 
 {% block content %}
-    <h2>Twój profil</h2>
-    <br>
-        <ul>
-        {% for publisher in object_list %}
-            <li>{{ publisher.building }}</li>
-        {% endfor %}
-    </ul>
+    <h2>Twój profil - {{ object | title }}</h2>
+    <hr>
+
+    <div class="container">
+        <div class="row align-items-start">
+            <div class="col">
+                Nazwa użytkownika:
+            </div>
+            <div class="col">
+                {{ object.user.id }}
+            </div>
+            <div class="col">
+                {% for flat in object.flat.all %}
+                    {{ flat }}
+                {% empty %}
+                    Nie masz dodanych mieszkań
+                {% endfor %}
+            </div>
+            <div class="col">
+
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}

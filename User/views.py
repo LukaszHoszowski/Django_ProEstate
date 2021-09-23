@@ -3,10 +3,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, FormView, ListView
+from django.views.generic import CreateView, FormView, ListView, UpdateView, DetailView
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
-from User.forms import SignUpForm, ProfileFormBuilding, ProfileFormFlat
+from User.forms import SignUpForm, ProfileFormBuilding, ProfileFormFlat, ProfileFormAdditional
 from User.models import Profile
 
 
@@ -29,32 +29,53 @@ class UpdatePassword(LoginRequiredMixin, PasswordChangeView):
     template_name = 'User/change_pass.html'
 
 
-class ProfileCreateBuildingView(LoginRequiredMixin, CreateView):
+class ProfileCreateAdditionalView(LoginRequiredMixin, CreateView):
+    form_class = ProfileFormAdditional
+    success_url = reverse_lazy('User:profile_create_building')
+    template_name = 'User/profile_create_additional.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class ProfileCreateBuildingView(LoginRequiredMixin, UpdateView):
     form_class = ProfileFormBuilding
     success_url = reverse_lazy('User:profile_create_flat')
     template_name = 'User/profile_create_building.html'
 
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
 
-class ProfileCreateFlatView(LoginRequiredMixin, CreateView):
+class ProfileCreateFlatView(LoginRequiredMixin, UpdateView):
+    model = Profile
     form_class = ProfileFormFlat
     success_url = reverse_lazy('User:profile')
     template_name = 'User/profile_create_flat.html'
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+    def get_form(self, form_class=None):
+        buildings = self.object.building.all()
+        form = ProfileFormFlat(buildings=buildings)
+        return form
 
 
-class ProfileView(LoginRequiredMixin, ListView):
+class ProfileView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'User/profile_view.html'
 
-    def get_queryset(self):
-        return Profile.objects.filter(user=self.request.user)
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+    #
+    # def get_queryset(self):
+    #     return Profile.objects.get(user=self.request.user)
 
 
 class UserLoginView(LoginView):
