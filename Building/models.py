@@ -34,7 +34,7 @@ class Building(models.Model):
     city = models.CharField(max_length=100, verbose_name='Miasto')
     zip_code = models.CharField(max_length=6, verbose_name='Kod pocztowy')
     no_of_flats = models.PositiveIntegerField(verbose_name='Ilość mieszkań w budynku')
-    building_picture = models.ImageField(upload_to='images/', verbose_name='Zdjęcie budynku')
+    building_picture = models.ImageField(upload_to='images/buildings/', verbose_name='Zdjęcie budynku')
     housing_cooperative = models.ForeignKey('HousingCooperative', on_delete=models.SET_NULL, null=True,
                                             verbose_name='Wspólnota/zarządca')
     slug = models.SlugField(null=False, unique=True)
@@ -115,7 +115,7 @@ class Flat(models.Model):
     water = models.BooleanField(default=True, verbose_name='Woda')
     water_heating = models.BooleanField(default=True, verbose_name='Podgrzewanie wody z CO')
     building = models.ForeignKey(Building, on_delete=models.CASCADE, verbose_name='Budynek')
-    user = models.ManyToManyField(User, blank=True, verbose_name='Mieszkańcy')
+    # user = models.ManyToManyField(User, blank=True, verbose_name='Mieszkańcy')
 
     def __str__(self):
         return f'{self.building}/{self.number}{self.number_suffix if self.number_suffix else ""}'

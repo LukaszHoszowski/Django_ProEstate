@@ -10,9 +10,9 @@
     <br>
     <form method="post" action="">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form | crispy }}
         <br><br>
-        <input class="btn btn-secondary" type="submit" value="Utwórz">
+        <input class="btn btn-secondary" type="submit" value="Zapisz">
         <br><br>
 {#        <a href="{% url 'home' %}">Home</a>#}
     </form>

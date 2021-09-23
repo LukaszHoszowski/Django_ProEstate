@@ -32,9 +32,10 @@ class SignUpForm(UserCreationForm):
 class ProfileFormAdditional(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user', 'flat', 'is_verified', 'token', 'created', 'building']
+        fields = ['avatar', 'phone_number', 'contact_flag']
         labels = {
-            'phoneNumber': 'Nr telefonu',
+            'avatar': 'Dodaj swoje zdjęcie',
+            'phone_number': 'Nr telefonu',
             'contact_flag': '',
         }
         help_texts = {
@@ -46,7 +47,7 @@ class ProfileFormAdditional(forms.ModelForm):
 class ProfileFormBuilding(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user', 'flat', 'is_verified', 'token', 'created', 'contact_flag', 'phoneNumber']
+        fields = ['building']
         labels = {
             'building': 'Budynek',
         }
@@ -55,7 +56,8 @@ class ProfileFormBuilding(forms.ModelForm):
 class ProfileFormFlat(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user', 'building', 'is_verified', 'token', 'created', 'phoneNumber', 'contact_flag']
+        fields = ['flat']
+        # fields = '__all__'
         labels = {
             'flat': 'Mieszkanie',
         }

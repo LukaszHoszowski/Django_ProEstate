@@ -5,25 +5,40 @@
 
 {% block content %}
     <h2>Twój profil - {{ object | title }}</h2>
+    <br>
     <hr>
 
     <div class="container">
+
         <div class="row align-items-start">
             <div class="col">
-                Nazwa użytkownika:
+{#                <div class="circle-img rounded-circle">#}
+                    <img src="{{ object.avatar.url }}" class="img-fluid max-width: 150px height: auto;" alt="avatar">
+{#                </div>#}
             </div>
             <div class="col">
-                {{ object.user.id }}
+                <ul>Nazwa użytkownika:</ul>
+                <ul>Imię:</ul>
+                <ul>Nazwisko:</ul>
+            </div>
+            <div class="col">
+                <b>
+                <ul>{{ object.user.username }}</ul>
+                <ul>{{ object.user.first_name }}</ul>
+                <ul>{{ object.user.last_name }}</ul>
+                </b>
+            </div>
+            <div class="col">
+                Twoje mieszkania:
             </div>
             <div class="col">
                 {% for flat in object.flat.all %}
-                    {{ flat }}
+                    <b>{{ flat }}</b>
                 {% empty %}
-                    Nie masz dodanych mieszkań
+                    Nie dodałeś żadnych mieszkań.
+                    <br>
+                    <b><a href="{% url 'User:profile_create_building' %}">Dodaj mieszkanie</a></b>
                 {% endfor %}
-            </div>
-            <div class="col">
-
             </div>
         </div>
     </div>

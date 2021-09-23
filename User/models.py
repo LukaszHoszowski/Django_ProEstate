@@ -7,11 +7,12 @@ from Building.models import Building, Flat
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phoneNumberRegex = RegexValidator(regex=r"^\+?1?\d{8,15}$")
-    phoneNumber = models.CharField(validators=[phoneNumberRegex], max_length=16, unique=True, blank=True)
+    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=16, unique=True, blank=True)
     contact_flag = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
     token = models.CharField(max_length=100, default=None, blank=True, null=True)
+    avatar = models.ImageField(upload_to='images/avatars/', null=True, blank=True, verbose_name='Avatar użytkownika')
     building = models.ManyToManyField(Building, blank=True)
     # usunac i zostawic relacje profile -> flat
     flat = models.ManyToManyField(Flat, blank=True)
