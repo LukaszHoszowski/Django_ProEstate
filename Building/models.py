@@ -75,13 +75,16 @@ class BuildingDocs(models.Model):
 
 
 class BuildingPhotos(models.Model):
-    building = models.OneToOneField(Building, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='images/buildings/from_users/', verbose_name='Zdjęcie budynku', blank=True)
     picture_description = models.CharField(max_length=255, verbose_name='Opis zdjęcia')
+    building = models.ForeignKey(Building, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Zdjęcie nieruchomości'
         verbose_name_plural = 'Zdjęcia nieruchomości'
+
+    def __str__(self):
+        return f'{self.building} - {self.picture_description}'
 
 
 class Cartography(models.Model):
@@ -92,7 +95,6 @@ class Cartography(models.Model):
 
     def __str__(self):
         return f'{self.building} - {self.parcel_identification_number}'
-
 
     class Meta:
         verbose_name = 'Dane kartograficzne'
@@ -110,6 +112,7 @@ class HousingCooperative(models.Model):
                              verbose_name='Logotyp zarzadcy/wspólnoty')
     email = models.EmailField(max_length=254, null=True, verbose_name='Email')
     phone = models.CharField(max_length=12, null=True, verbose_name='Nr telefonu')
+    website = models.URLField(blank=True)
 
     def __str__(self):
         return f'{self.name.title()}'

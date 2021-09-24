@@ -1,7 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms import ModelForm
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 
-from Building.models import Building, Flat, BuildingDocs
+from Building.forms import BuildingPhotosForm
+from Building.models import Building, Flat, BuildingDocs, BuildingPhotos
 
 
 class BuildingListView(LoginRequiredMixin, ListView):
@@ -25,16 +29,46 @@ class BuildingCartographyView(LoginRequiredMixin, DetailView):
     slug_field = 'slug'
 
 
-class BuildingDetailDocsView(LoginRequiredMixin, ListView):
-    model = BuildingDocs
+class BuildingCoopView(LoginRequiredMixin, DetailView):
+    model = Building
     context_object_name = 'building'
-    template_name = 'Building/building_details.html'
+    template_name = 'Building/building_coop.html'
+    slug_field = 'slug'
 
 
-class BuildingDetailPhotosView(LoginRequiredMixin, ListView):
-    model = BuildingDocs
+class BuildingDocsView(LoginRequiredMixin, ListView):
+    model = Building
     context_object_name = 'building'
-    template_name = 'Building/building_details.html'
+    template_name = 'Building/building_documents.html'
+    slug_field = 'slug'
+
+
+class BuildingPhotosView(LoginRequiredMixin, DetailView):
+    model = Building
+    context_object_name = 'building'
+    template_name = 'Building/building_photos.html'
+    slug_field = 'slug'
+
+
+class BuildingPhotosCreate(LoginRequiredMixin, CreateView):
+    form_class = BuildingPhotosForm
+    template_name = 'Building/building_photos_create.html'
+    success_url = reverse_lazy('Building:building_photos')
+
+    def form_valid(self, form):
+        building = Building.objects.get(slug=self.kwargs['slug'])
+        self.object = form.save(commit=False)
+        self.object.building = building
+        return super().form_valid(form)
+
+    def get_initial(self):
+        building = get_object_or_404(Building, slug=self.kwargs.get('slug'))
+        return {
+            'building': building,
+        }
+
+    # def get_success_url(self):
+    #     return reverse_lazy('Building:building_photos', kwargs={'slug': self.object.slug})
 
 
 class FlatListView(LoginRequiredMixin, ListView):

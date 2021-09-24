@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Building.models import Building, Cartography, HousingCooperative, Flat, BuildingDocs
+from Building.models import Building, Cartography, HousingCooperative, Flat, BuildingDocs, BuildingPhotos
 
 
 # @admin.action(description='Dodaj mieszkania')
@@ -22,5 +22,6 @@ class FlatAdmin(admin.ModelAdmin):
 admin.site.register(Flat, FlatAdmin)
 admin.site.register(Building, BuildingAdmin)
 admin.site.register(BuildingDocs)
+admin.site.register(BuildingPhotos)
 admin.site.register(Cartography)
 admin.site.register(HousingCooperative)

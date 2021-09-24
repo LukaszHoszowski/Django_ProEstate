@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}proEstate - Budynek{% endblock title %}
+
+{% block content %}
+
+{#    <div class="card text-left bg-white">#}
+{#        <div class="card-header bg-white">#}
+{#            <ul class="nav nav-tabs card-header-tabs bg-white ">#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link link-secondary" href="{% url 'Building:building_details' building.slug %}">Dane#}
+{#                        nieruchomości</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link link-secondary" href="{% url 'Building:building_cartography' building.slug %}">Kartografia</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link link-secondary" href="{% url 'Building:building_flats' building.slug %}">Mieszkania</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link link-secondary"#}
+{#                       href="{% url 'Building:building_coop' building.slug %}">Zarządca</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link link-secondary" href="{% url 'Building:building_documents' building.slug %}">Dokumenty</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link active" aria-current="true"#}
+{#                       href="{% url 'Building:building_photos' building.slug %}">Zdjęcia</a>#}
+{#                </li>#}
+{#            </ul>#}
+{#        </div>#}
+
+        <div class="card-body">
+            <div class="container">
+                <div class="row p-3">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        <br><br>
+                        <input class="btn btn-secondary" type="submit" value="Zapisz">
+                        <br><br>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}

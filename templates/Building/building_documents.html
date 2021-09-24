@@ -15,17 +15,17 @@
                     <a class="nav-link link-secondary" href="{% url 'Building:building_cartography' building.slug %}">Kartografia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link link-secondary" href="{% url 'Building:building_flats' building.slug %}">Mieszkania</a>
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_details' building.slug %}">Mieszkania</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="true"
                        href="{% url 'Building:building_coop' building.slug %}">Zarządca</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link link-secondary" href="{% url 'Building:building_documents' building.slug %}">Dokumenty</a>
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_photos' building.slug %}">Dokumenty</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link link-secondary" href="{% url 'Building:building_photos' building.slug %}">Zdjęcia</a>
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_details' building.slug %}">Zdjęcia</a>
                 </li>
             </ul>
         </div>
@@ -36,9 +36,17 @@
                 <br>
                 <div class="row align-items-start">
                     <div class="col">
-                        <img src="{{ building.housing_cooperative.logo.url }}"
-                             class="img-fluid rounded-3 float img-fluid max-width: 600px height: auto;"
-                             alt="zdjęcie budynku">
+                        {% for picture in building.buildingphotos.all %}
+
+                        {{ picture.pcture.url }}
+
+                        {% endfor %}
+
+
+
+{#                        <img src="{{ building.buldingphotos.picture. }}"#}
+{#                             class="img-fluid rounded-3 float img-fluid max-width: 600px height: auto;"#}
+{#                             alt="zdjęcie budynku">#}
 
                     </div>
 
