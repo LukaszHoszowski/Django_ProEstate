@@ -30,18 +30,19 @@ HEATING_TYPES = [
 
 class Building(models.Model):
     street = models.CharField(max_length=100, verbose_name='Ulica')
-    building_no = models.CharField(max_length=5, verbose_name='Number budynku')
+    number = models.CharField(max_length=5, verbose_name='Number budynku')
     city = models.CharField(max_length=100, verbose_name='Miasto')
     zip_code = models.CharField(max_length=6, verbose_name='Kod pocztowy')
     no_of_flats = models.PositiveIntegerField(verbose_name='Ilość mieszkań w budynku')
-    building_picture = models.ImageField(upload_to='images/buildings/', verbose_name='Zdjęcie budynku')
-    housing_cooperative = models.ForeignKey('HousingCooperative', on_delete=models.SET_NULL, null=True,
+    picture = models.ImageField(upload_to='images/buildings/', verbose_name='Zdjęcie budynku', blank=True)
+    housing_cooperative = models.ForeignKey('HousingCooperative', on_delete=models.SET_NULL, null=True, blank=True,
                                             verbose_name='Wspólnota/zarządca')
     slug = models.SlugField(null=False, unique=True)
 
     def generate_flats(self):
         for flat_no in range(self.no_of_flats):
-            Flat.objects.create(number=flat_no + 1, building=self)
+            Flat.objects.create(number=flat_no + 1, building=self,
+                                slug=f'{self.street}-{self.building_no}-{flat_no + 1}')
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -52,15 +53,35 @@ class Building(models.Model):
             self.generate_flats()
 
     class Meta:
-        ordering = ('street', 'building_no')
+        ordering = ('street', 'number')
         verbose_name = 'Budynek'
         verbose_name_plural = 'Budynki'
 
     def __str__(self):
-        return f'{self.street} {self.building_no}'
+        return f'{self.street} {self.number}'
 
     def get_absolute_url(self):
         return reverse('building_detail', kwargs={'slug': self.slug})
+
+
+class BuildingDocs(models.Model):
+    building = models.OneToOneField(Building, on_delete=models.CASCADE)
+    document = models.FileField(upload_to='images/buildings/documents/', verbose_name='Zdjęcie budynku', blank=True)
+    document_description = models.CharField(max_length=255, verbose_name='Opis dokumentu')
+
+    class Meta:
+        verbose_name = 'Dokument nieruchomości'
+        verbose_name_plural = 'Dokumenty nieruchomości'
+
+
+class BuildingPhotos(models.Model):
+    building = models.OneToOneField(Building, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to='images/buildings/from_users/', verbose_name='Zdjęcie budynku', blank=True)
+    picture_description = models.CharField(max_length=255, verbose_name='Opis zdjęcia')
+
+    class Meta:
+        verbose_name = 'Zdjęcie nieruchomości'
+        verbose_name_plural = 'Zdjęcia nieruchomości'
 
 
 class Cartography(models.Model):
@@ -82,12 +103,13 @@ class Cartography(models.Model):
 
 class HousingCooperative(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nazwa zarządcy/wspólnoty')
-    president = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, verbose_name='Prezes')
+    president = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Prezes')
     street = models.CharField(max_length=100, null=True, verbose_name='Ulica')
     number = models.CharField(max_length=10, null=True, verbose_name='Numer')
     city = models.CharField(max_length=100, null=True, verbose_name='Miasto')
     zip_code = models.CharField(max_length=6, null=True, verbose_name='Kod pocztowy')
-    logo = models.ImageField(upload_to='images/coop_logo/', null=True, verbose_name='Logotyp zarzadcy/wspólnoty')
+    logo = models.ImageField(upload_to='images/coop_logo/', null=True, blank=True,
+                             verbose_name='Logotyp zarzadcy/wspólnoty')
     email = models.EmailField(max_length=254, null=True, verbose_name='Email')
     phone = models.CharField(max_length=12, null=True, verbose_name='Nr telefonu')
 
@@ -115,13 +137,15 @@ class Flat(models.Model):
     water = models.BooleanField(default=True, verbose_name='Woda')
     water_heating = models.BooleanField(default=True, verbose_name='Podgrzewanie wody z CO')
     building = models.ForeignKey(Building, on_delete=models.CASCADE, verbose_name='Budynek')
+    slug = models.SlugField(null=False, unique=True)
+
     # user = models.ManyToManyField(User, blank=True, verbose_name='Mieszkańcy')
 
     def __str__(self):
         return f'{self.building}/{self.number}{self.number_suffix if self.number_suffix else ""}'
 
-    # def get_absolute_url(self):
-    #     return reverse('flat_detail', kwargs={'slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('flat_detail', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'Mieszkanie'
