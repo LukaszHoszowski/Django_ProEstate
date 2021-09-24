@@ -18,6 +18,13 @@ class BuildingDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'slug'
 
 
+class BuildingCartographyView(LoginRequiredMixin, DetailView):
+    model = Building
+    context_object_name = 'building'
+    template_name = 'Building/building_cartography.html'
+    slug_field = 'slug'
+
+
 class BuildingDetailDocsView(LoginRequiredMixin, ListView):
     model = BuildingDocs
     context_object_name = 'building'

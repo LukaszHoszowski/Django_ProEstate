@@ -93,8 +93,6 @@ class Cartography(models.Model):
     def __str__(self):
         return f'{self.building} - {self.parcel_identification_number}'
 
-    def get_absolute_url(self):
-        return reverse('cartography_detail', args=[str(self.id)])
 
     class Meta:
         verbose_name = 'Dane kartograficzne'

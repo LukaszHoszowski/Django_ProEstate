@@ -9,7 +9,7 @@
                 <div class="col-sm">
                     <div class="text-left fw-bold">{{ building|upper }}</div>
                     <br>
-                    <a href="{% url 'Building:building_details' slug=building.slug %}" class="link-secondary text-left">
+                    <a href="{% url 'Building:building_details' building.slug %}" class="link-secondary text-left">
                         <img src="{{ building.picture.url }}" class="rounded-3 float img-fluid"
                              style="max-width: 200px; height: auto;" alt="budynek">
                     </a>

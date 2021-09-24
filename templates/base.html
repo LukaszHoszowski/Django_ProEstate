@@ -59,70 +59,71 @@
 <body class="d-flex flex-column h-100">
 
 <header>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'main' %}">
-                <img src="https://www.svgrepo.com/show/3504/big-building.svg" alt="" width="60" height="60"
-                     class="d-inline-block align-middle">
+    <div class="container-md">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid w-75">
+                <a class="navbar-brand" href="{% url 'main' %}">
+                    <img src="https://www.svgrepo.com/show/3504/big-building.svg" alt="" width="60" height="60"
+                         class="d-inline-block align-middle">
 
-                ProEstate</a>
+                    ProEstate</a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Building:buildings' %}">Budynki</a>
-                    </li>
-                    {#                    <li class="nav-item">#}
-                    {#                        <a class="nav-link disabled"#}
-                    {#                           href="https://getbootstrap.com/docs/5.0/examples/sticky-footer-navbar/#" tabindex="-1"#}
-                    {#                           aria-disabled="true">Disabled</a>#}
-                    {#                    </li>#}
-                </ul>
-                {% if user.is_authenticated %}
-                    {#                    {% url 'profile' %}#}
-                    {#                    <a href=""#}
-                    {#                       class="link-secondary">{{ user.first_name|title }} {{ user.last_name|title }}</a>#}
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'Building:buildings' %}">Budynki</a>
+                        </li>
+                        {#                    <li class="nav-item">#}
+                        {#                        <a class="nav-link disabled"#}
+                        {#                           href="https://getbootstrap.com/docs/5.0/examples/sticky-footer-navbar/#" tabindex="-1"#}
+                        {#                           aria-disabled="true">Disabled</a>#}
+                        {#                    </li>#}
+                    </ul>
+                    {% if user.is_authenticated %}
+                        {#                    {% url 'profile' %}#}
+                        {#                    <a href=""#}
+                        {#                       class="link-secondary">{{ user.first_name|title }} {{ user.last_name|title }}</a>#}
 
-                    <li class="nav-item dropdown align-middle">
-                        <a class="nav-link dropdown-toggle link-secondary align-middle" href="#"
-                           id="navbarDarkDropdownMenuLink"
-                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ user.first_name|title }} {{ user.last_name|title }}
+                        <li class="nav-item dropdown align-middle">
+                            <a class="nav-link dropdown-toggle link-secondary align-middle" href="#"
+                               id="navbarDarkDropdownMenuLink"
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ user.first_name|title }} {{ user.last_name|title }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark"
+                                aria-labelledby="navbarDarkDropdownMenuLink">
+                                <li><a class="dropdown-item" href="{% url 'User:profile' %}">Profil</a></li>
+                                <li><a class="dropdown-item" href="#">Modyfikuj profil</a></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'User:pass_change' %}">Zmień hasło</a></li>
+                            </ul>
+                        </li>
+
+                        <div class="px-3"></div>
+                        <a href="{% url 'User:user_logout' %}">
+                            <button class="px-3 btn btn-outline-danger nav-item>">Wyloguj</button>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark"
-                            aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a class="dropdown-item" href="{% url 'User:profile' %}">Profil</a></li>
-                            <li><a class="dropdown-item" href="#">Modyfikuj profil</a></li>
-                            <li><a class="dropdown-item text-danger" href="{% url 'User:pass_change' %}">Zmień hasło</a></li>
-                        </ul>
-                    </li>
+                    {% else %}
+                        <a href="{% url 'User:user_login' %}">
+                            <button class="px-3 btn btn-outline-success nav-item">Zaloguj</button>
+                        </a>
+                        <div class="px-3"></div>
+                        <a href="{% url 'User:signup' %}">
+                            <button class="px-3 btn btn-outline-info nav-item">Zarejestruj</button>
+                        </a>
+                    {% endif %}
 
-                    <div class="px-3"></div>
-                    <a href="{% url 'User:user_logout' %}">
-                        <button class="px-3 btn btn-outline-danger nav-item>">Wyloguj</button>
-                    </a>
-                {% else %}
-                    <a href="{% url 'User:user_login' %}">
-                        <button class="px-3 btn btn-outline-success nav-item">Zaloguj</button>
-                    </a>
-                    <div class="px-3"></div>
-                    <a href="{% url 'User:signup' %}">
-                        <button class="px-3 btn btn-outline-info nav-item">Zarejestruj</button>
-                    </a>
-                {% endif %}
-
-                {#                <form class="d-flex">#}
-                {#                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
-                {#                    <button class="btn btn-outline-success" type="submit">Search</button>#}
-                {#                </form>#}
+                    {#                <form class="d-flex">#}
+                    {#                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
+                    {#                    <button class="btn btn-outline-success" type="submit">Search</button>#}
+                    {#                </form>#}
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 </header>
 <br>
 <br>
@@ -148,7 +149,7 @@
 {#</footer>#}
 
 <footer class="footer mt-auto py-6 bg-light">
-    <div class="container text-secondary">
+    <div class="container text-secondary w-75">
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
