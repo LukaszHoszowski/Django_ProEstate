@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 
-from Building.forms import BuildingPhotosForm
+from Building.forms import BuildingPhotosForm, BuildingDocsForm
 from Building.models import Building, Flat, BuildingDocs, BuildingPhotos
 
 
@@ -36,30 +36,24 @@ class BuildingCoopView(LoginRequiredMixin, DetailView):
     slug_field = 'slug'
 
 
-class BuildingDocsView(LoginRequiredMixin, ListView):
+class BuildingDocsView(LoginRequiredMixin, DetailView):
     model = Building
     context_object_name = 'building'
+    paginate_by = 8
     template_name = 'Building/building_documents.html'
     slug_field = 'slug'
 
 
-class BuildingPhotosView(LoginRequiredMixin, DetailView):
-    model = Building
-    context_object_name = 'building'
-    template_name = 'Building/building_photos.html'
-    slug_field = 'slug'
-
-
-class BuildingPhotosCreate(LoginRequiredMixin, CreateView):
-    form_class = BuildingPhotosForm
-    template_name = 'Building/building_photos_create.html'
-    success_url = reverse_lazy('Building:building_photos')
+class BuildingDocsCreate(LoginRequiredMixin, CreateView):
+    form_class = BuildingDocsForm
+    template_name = 'Building/building_documents_create.html'
 
     def form_valid(self, form):
-        building = Building.objects.get(slug=self.kwargs['slug'])
-        self.object = form.save(commit=False)
-        self.object.building = building
-        return super().form_valid(form)
+        form.instance.piece = Building.objects.get(slug=self.kwargs['slug'])
+        return super(BuildingDocsCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('Building:building_documents', kwargs={'slug': self.kwargs['slug']})
 
     def get_initial(self):
         building = get_object_or_404(Building, slug=self.kwargs.get('slug'))
@@ -67,8 +61,31 @@ class BuildingPhotosCreate(LoginRequiredMixin, CreateView):
             'building': building,
         }
 
-    # def get_success_url(self):
-    #     return reverse_lazy('Building:building_photos', kwargs={'slug': self.object.slug})
+
+class BuildingPhotosView(LoginRequiredMixin, DetailView):
+    model = Building
+    context_object_name = 'building'
+    paginate_by = 8
+    template_name = 'Building/building_photos.html'
+    slug_field = 'slug'
+
+
+class BuildingPhotosCreate(LoginRequiredMixin, CreateView):
+    form_class = BuildingPhotosForm
+    template_name = 'Building/building_photos_create.html'
+
+    def form_valid(self, form):
+        form.instance.piece = Building.objects.get(slug=self.kwargs['slug'])
+        return super(BuildingPhotosCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('Building:building_photos', kwargs={'slug': self.kwargs['slug']})
+
+    def get_initial(self):
+        building = get_object_or_404(Building, slug=self.kwargs.get('slug'))
+        return {
+            'building': building,
+        }
 
 
 class FlatListView(LoginRequiredMixin, ListView):

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}proEstate - Budynek{% endblock title %}
 
 {% block content %}
@@ -33,7 +35,7 @@
                 <br>
                 <div class="row align-items-start">
                     <div class="col">
-{% load static %}
+
                         <img src="{% static 'geoportal.jpg' %}"
                              class="img-fluid rounded-3 float img-fluid max-width: 600px height: auto;"
                              alt="zdjęcie budynku">

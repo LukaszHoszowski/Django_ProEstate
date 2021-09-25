@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
+from Building.validators import MaxSizeValidator
+
 NUMBER_SUFFIX = [
     ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'), ('G', 'G'), ('H', 'H'), ('I', 'I'),
     ('J', 'J'), ('K', 'K'), ('L', 'L'), ('M', 'M')
@@ -65,19 +67,23 @@ class Building(models.Model):
 
 
 class BuildingDocs(models.Model):
-    building = models.OneToOneField(Building, on_delete=models.CASCADE)
-    document = models.FileField(upload_to='images/buildings/documents/', verbose_name='Zdjęcie budynku', blank=True)
+    building = models.ForeignKey(Building, on_delete=models.CASCADE)
+    document = models.FileField(upload_to='documents/buildings/', verbose_name='Zdjęcie budynku', blank=True,
+                                validators=[MaxSizeValidator(1)])
     document_description = models.CharField(max_length=255, verbose_name='Opis dokumentu')
 
     class Meta:
         verbose_name = 'Dokument nieruchomości'
         verbose_name_plural = 'Dokumenty nieruchomości'
 
+    def __str__(self):
+        return f'{self.building} - {self.document_description}'
+
 
 class BuildingPhotos(models.Model):
+    building = models.ForeignKey(Building, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='images/buildings/from_users/', verbose_name='Zdjęcie budynku', blank=True)
     picture_description = models.CharField(max_length=255, verbose_name='Opis zdjęcia')
-    building = models.ForeignKey(Building, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Zdjęcie nieruchomości'

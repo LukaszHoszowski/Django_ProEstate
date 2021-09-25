@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}proEstate - Budynek{% endblock title %}
 
 {% block content %}
@@ -37,12 +39,27 @@
 
                     {% for pic in building.buildingphotos_set.all %}
                         <img src="{{ pic.picture.url }}" class="col-lg-3 col-md-4 col-6 my-3 img-fluid card p-3">
+                    {% empty %}
+                        Nie dodano jeszcze zdjęć
                     {% endfor %}
+
+
                 </div>
 
-                <a href="{% url 'Building:building_photos_add' building.slug %}">add</a>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col align-center">
 
+                                <a href="{% url 'Building:building_photos_add' building.slug %}"><img src="{% static 'plus.svg' %}"
+                                                                          style="height: 30px; width: auto;" alt=""></a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 {% endblock content %}
