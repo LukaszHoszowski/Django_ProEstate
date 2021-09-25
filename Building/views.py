@@ -25,6 +25,7 @@ class BuildingFlatsView(LoginRequiredMixin, DetailView):
     model = Building
     context_object_name = 'building'
     template_name = 'Building/building_flats.html'
+    ordering = ['flat.number']
     slug_field = 'slug'
 
 

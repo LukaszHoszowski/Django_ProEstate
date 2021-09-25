@@ -6,14 +6,20 @@
 
 {% block content %}
 
-
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form | crispy }}
-        <br><br>
-        <input class="btn btn-secondary" type="submit" value="Zapisz">
-        <br><br>
-{#        <a href="{% url 'home' %}">Home</a>#}
-    </form>
+    <div class="container align-content-center">
+        <div class="row align-content-center">
+            <div class="col-sm">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <br><br>
+                    <input class="btn btn-secondary" type="submit" value="Zapisz">
+                    <br><br>
+                </form>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}

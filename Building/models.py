@@ -156,5 +156,6 @@ class Flat(models.Model):
         return reverse('flat_detail', kwargs={'slug': self.slug})
 
     class Meta:
+        ordering = ['number']
         verbose_name = 'Mieszkanie'
         verbose_name_plural = 'Mieszkania'

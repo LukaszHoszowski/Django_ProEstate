@@ -75,8 +75,10 @@ class ProfileCreateFlatView(LoginRequiredMixin, UpdateView):
         return self.request.user.profile
 
     def get_success_url(self):
+        print(self.object, self.object.building.building.slug, self.object.flat.pk)
         return reverse_lazy('Building:flat_update',
                             kwargs={'slug': self.object.building.building.slug, 'pk': self.object.flat.pk})
+
 
     # def form_valid(self, form):
     #     form.instance.user = self.request.user
