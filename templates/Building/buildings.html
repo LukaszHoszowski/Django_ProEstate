@@ -32,9 +32,8 @@
             <div class="col-sm">
             </div>
             <div class="col-sm">
-
-            {%  if page_obj.paginator.num_pages > 1 %}
-                <div class="pagination container align-content-center">
+                {% if page_obj.paginator.num_pages > 1 %}
+                    <div class="pagination container align-content-center">
                     <span class="step-links align-content-center">
                         {% if page_obj.has_previous %}
                             {#                    <a href="?page=1">&laquo; pierwsza</a>#}
@@ -50,9 +49,8 @@
                             <a href="?page={{ page_obj.next_page_number }}"> następna &raquo;</a>
                         {% endif %}
                     </span>
-                </div>
-            {% endif %}
-
+                    </div>
+                {% endif %}
             </div>
             <div class="col-sm">
             </div>

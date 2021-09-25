@@ -30,11 +30,10 @@ class BuildingDocsForm(forms.ModelForm):
         }
 
 
-class FlatDetailsForm(forms.ModelForm):
+class FlatUpdateForm(forms.ModelForm):
     class Meta:
-        model = BuildingPhotos
-        exclude = ['building']
-        labels = {
-            'picture_description': 'Opis zdjęcia',
-            'picture': ''
-        }
+        model = Flat
+        exclude = ['building', 'slug', 'number']
+        # labels = {
+        #     'building': 'Budynek',
+        # }

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 from Building.validators import MaxSizeValidator
 
@@ -44,7 +45,7 @@ class Building(models.Model):
     def generate_flats(self):
         for flat_no in range(self.no_of_flats):
             Flat.objects.create(number=flat_no + 1, building=self,
-                                slug=f'{self.street}-{self.building_no}-{flat_no + 1}')
+                                slug=slugify(f'{self.street}-{self.number}-{flat_no + 1}'))
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -139,10 +140,10 @@ class Flat(models.Model):
     floor = models.SmallIntegerField(verbose_name='Piętro', null=True, blank=True)
     ownership_type = models.SmallIntegerField(choices=OWNERSHIP_TYPES, verbose_name='Typ własności', default=1)
     heating_type = models.SmallIntegerField(choices=HEATING_TYPES, verbose_name='Typ ogrzewania', default=1)
+    water_heating = models.BooleanField(default=True, verbose_name='Podgrzewanie wody z CO')
     natural_gas = models.BooleanField(default=True, verbose_name='Gaz')
     electricity = models.BooleanField(default=True, verbose_name='Prąd')
     water = models.BooleanField(default=True, verbose_name='Woda')
-    water_heating = models.BooleanField(default=True, verbose_name='Podgrzewanie wody z CO')
     building = models.ForeignKey(Building, on_delete=models.CASCADE, verbose_name='Budynek')
     slug = models.SlugField(null=False, unique=True)
 
@@ -157,5 +158,3 @@ class Flat(models.Model):
     class Meta:
         verbose_name = 'Mieszkanie'
         verbose_name_plural = 'Mieszkania'
-
-# https://mapy.geoportal.gov.pl/imap/Imgp_2.html?identifyParcel=026401_1.0022.AR_28.87/14

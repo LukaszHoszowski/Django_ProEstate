@@ -1,11 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms import ModelForm
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from Building.forms import BuildingPhotosForm, BuildingDocsForm
-from Building.models import Building, Flat, BuildingDocs, BuildingPhotos
+from Building.forms import BuildingPhotosForm, BuildingDocsForm, FlatUpdateForm
+from Building.models import Building, Flat
 
 
 class BuildingListView(LoginRequiredMixin, ListView):
@@ -20,6 +19,30 @@ class BuildingDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'building'
     template_name = 'Building/building_details.html'
     slug_field = 'slug'
+
+
+class BuildingFlatsView(LoginRequiredMixin, DetailView):
+    model = Building
+    context_object_name = 'building'
+    template_name = 'Building/building_flats.html'
+    slug_field = 'slug'
+
+
+class FlatDetailView(LoginRequiredMixin, DetailView):
+    model = Flat
+    context_object_name = 'flat'
+    template_name = 'Building/flat_details.html'
+
+
+class FlatUpdateView(LoginRequiredMixin, UpdateView):
+    model = Flat
+    form_class = FlatUpdateForm
+    context_object_name = 'flat'
+    template_name = 'Building/flat_update.html'
+    # success_url = reverse_lazy('Building:flat_details', )
+
+    def get_success_url(self):
+        return reverse_lazy('Building:flat_details', kwargs={'slug': self.object.building.slug, 'pk': self.object.pk})
 
 
 class BuildingCartographyView(LoginRequiredMixin, DetailView):
@@ -86,17 +109,3 @@ class BuildingPhotosCreate(LoginRequiredMixin, CreateView):
         return {
             'building': building,
         }
-
-
-class FlatListView(LoginRequiredMixin, ListView):
-    model = Flat
-    context_object_name = 'flats'
-    paginate_by = 3
-    template_name = 'Building/flats.html'
-
-
-class FlatDetailView(LoginRequiredMixin, DetailView):
-    model = Flat
-    context_object_name = 'flat'
-    template_name = 'Building/flat_details.html'
-    slug_field = 'slug'

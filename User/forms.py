@@ -53,8 +53,6 @@ class ProfileFormBuilding(forms.ModelForm):
         }
 
 
-
-
 class ProfileFormFlat(forms.ModelForm):
     class Meta:
         model = Profile
