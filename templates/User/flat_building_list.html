@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for flat in flats %}
+    <option value="{{ flat.pk }}">{{ flat.number }}</option>
+{% endfor %}

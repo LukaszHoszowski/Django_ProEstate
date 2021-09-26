@@ -5,19 +5,22 @@
 {% block title %}proEstate - Budynek{% endblock title %}
 
 {% block content %}
-
+    <h2>Dodawanie mieszkań</h2>
+    <br>
     <div class="container align-content-center">
         <div class="row align-content-center">
             <div class="col-sm">
-                <form method="post">
+                <form method="post" action="">
                     {% csrf_token %}
                     {{ form | crispy }}
+                    <div class="p-3">
+                        <input class="btn btn-secondary" type="submit" value="Zapisz">
+                    </div>
                 </form>
+
             </div>
             <div class="col-sm">
-                <div class="p-3">
-                    <input class="btn btn-secondary" type="submit" value="Zapisz">
-                </div>
+
             </div>
             <div class="col-sm">
             </div>

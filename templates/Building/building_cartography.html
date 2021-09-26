@@ -54,9 +54,9 @@
                     </div>
                     <div class="col">
                         <b>
-                            <ul>{{ building.cartography.parcel_identification_number }}</ul>
-                            <ul>{{ building.cartography.get_parcel_precinct_display }}</ul>
-                            <ul>{{ building.cartography.parcel_number }}</ul>
+                            <ul>{{ building.cartography.parcel_identification_number|default:"brak danych" }}</ul>
+                            <ul>{{ building.cartography.get_parcel_precinct_display|default:"brak danych" }}</ul>
+                            <ul>{{ building.cartography.parcel_number|default:"brak danych" }}</ul>
                             <br>
 
                         </b>
