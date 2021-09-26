@@ -6,9 +6,10 @@ name = "pypi"
 [packages]
 django = "3.2.7"
 psycopg2-binary = "2.9.1"
-django-environ = "0.6.0"
-django-crispy-forms = "*"
-pillow = "*"
+django-environ = "0.7.0"
+django-crispy-forms = "1.13.0"
+crispy-bootstrap5 = "0.5"
+pillow = "8.3.2"
 
 [dev-packages]
 

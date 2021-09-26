@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}proEstate - Budynek{% endblock title %}
+
+{% block content %}
+
+    <div class="card text-left bg-white">
+        <div class="card-header bg-white">
+            <ul class="nav nav-tabs card-header-tabs bg-white ">
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_details' building.slug %}">Dane
+                        nieruchomości</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_cartography' building.slug %}">Kartografia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_flats' building.slug %}">Mieszkania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary"
+                       href="{% url 'Building:building_coop' building.slug %}">Zarządca</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_documents' building.slug %}">Dokumenty</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="true"
+                       href="{% url 'Building:building_photos' building.slug %}">Zdjęcia</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body">
+            <div class="container">
+                <div class="row p-3">
+
+                    {% for pic in building.buildingphotos_set.all %}
+                        <img src="{{ pic.picture.url }}" class="col-lg-3 col-md-4 col-6 my-3 img-fluid card p-3">
+                    {% empty %}
+                        Nie dodano jeszcze zdjęć
+                    {% endfor %}
+
+
+                </div>
+
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col align-center">
+
+                                <a href="{% url 'Building:building_photos_add' building.slug %}"><img src="{% static 'plus.svg' %}"
+                                                                          style="height: 30px; width: auto;" alt=""></a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

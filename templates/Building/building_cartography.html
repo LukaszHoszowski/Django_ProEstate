@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}proEstate - Budynek{% endblock title %}
+
+{% block content %}
+
+    <div class="card text-left bg-white">
+        <div class="card-header bg-white">
+            <ul class="nav nav-tabs card-header-tabs bg-white ">
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_details' building.slug %}">Dane nieruchomości</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="true" href="{% url 'Building:building_cartography' building.slug %}">Kartografia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_flats' building.slug %}">Mieszkania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_coop' building.slug %}">Zarządca</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_documents' building.slug %}">Dokumenty</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_photos' building.slug %}">Zdjęcia</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <br>
+                <br>
+                <div class="row align-items-start">
+                    <div class="col">
+
+                        <img src="{% static 'geoportal.jpg' %}"
+                             class="img-fluid rounded-3 float img-fluid max-width: 600px height: auto;"
+                             alt="zdjęcie budynku">
+
+                    </div>
+
+
+                    <div class="col">
+                        <ul>Numer identyfikacyjny działki:</ul>
+                        <ul>Obręb działki:</ul>
+                        <ul>Numer działki:</ul>
+                        <br>
+                        <ul>
+                            <a href="https://mapy.geoportal.gov.pl/imap/Imgp_2.html?identifyParcel={{ building.cartography.parcel_identification_number}}"
+                               target="_blank">Geoportal</a></ul>
+                    </div>
+                    <div class="col">
+                        <b>
+                            <ul>{{ building.cartography.parcel_identification_number }}</ul>
+                            <ul>{{ building.cartography.get_parcel_precinct_display }}</ul>
+                            <ul>{{ building.cartography.parcel_number }}</ul>
+                            <br>
+
+                        </b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#{{ building.cartography.parcel_number }}#}
+    {#    {% for flat in building.flat_set.all %}#}
+    {#       {{ flat.number }}#}
+    {#    {% endfor %}#}
+
+{% endblock content %}

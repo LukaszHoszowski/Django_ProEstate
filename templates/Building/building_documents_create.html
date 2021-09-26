@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}proEstate - Budynek{% endblock title %}
+
+{% block content %}
+
+        <div class="card-body">
+            <div class="container">
+                <div class="row p-3">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        <br><br>
+                        <input class="btn btn-secondary" type="submit" value="Zapisz">
+                        <br><br>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+{% endblock content %}

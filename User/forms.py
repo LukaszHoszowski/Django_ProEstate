@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
+from Building.models import Building, Flat
 from User.models import Profile
 
 
@@ -28,7 +29,40 @@ class SignUpForm(UserCreationForm):
         ]
 
 
-class ProfileForm(forms.ModelForm):
+class ProfileFormAdditional(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user']
+        fields = ['avatar', 'phone_number', 'contact_flag']
+        labels = {
+            'avatar': 'Dodaj swoje zdjęcie',
+            'phone_number': 'Nr telefonu',
+            'contact_flag': '',
+        }
+        help_texts = {
+            'contact_flag': """Czy wyrażasz zgodę na udostępnianie Twoich informacji kontaktowych innym mieszkańcom. 
+            Jeśli nie wyrazisz zgody, nikt nie będzie mógł Cie poinformować o awariach i innych zdarzeniach."""
+        }
+
+
+class ProfileFormBuilding(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['building']
+        labels = {
+            'building': 'Budynek',
+        }
+
+
+class ProfileFormFlat(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['flat']
+        # fields = '__all__'
+        labels = {
+            'flat': 'Mieszkanie',
+        }
+
+    def __init__(self, *args, buildings=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if buildings is not None:
+            self.fields['flat'].queryset = Flat.objects.filter(building__id__in=buildings)

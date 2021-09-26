@@ -4,6 +4,74 @@
 
 {% block content %}
 
-    {{ building.slug }}
+    <div class="card text-left bg-white">
+        <div class="card-header bg-white">
+            <ul class="nav nav-tabs card-header-tabs bg-white ">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="true" href="{% url 'Building:building_details' building.slug %}">Dane nieruchomości</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_cartography' building.slug %}">Kartografia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_flats' building.slug %}">Mieszkania</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_coop' building.slug %}">Zarządca</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_documents' building.slug %}">Dokumenty</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-secondary" href="{% url 'Building:building_photos' building.slug %}">Zdjęcia</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <br>
+                <br>
+                <div class="row align-items-start">
+                    <div class="col">
+
+                        <img src="{{ building.picture.url }}"
+                             class="img-fluid rounded-3 float img-fluid max-width: 600px height: auto;"
+                             alt="zdjęcie budynku">
+
+                    </div>
+
+
+                    <div class="col">
+                        <ul>Ulica:</ul>
+                        <ul>Numer:</ul>
+                        <ul>Miasto:</ul>
+                        <ul>Kod pocztowy:</ul>
+                        <br>
+                        <ul>Ilość mieszkań:</ul>
+                        <br>
+                        <ul>
+                            <a href="https://www.google.com/maps/place/{{ building.street }}+{{ building.number }}+{{ building.city }}+{{ building.zip_code }}"
+                               target="_blank">Google Maps</a></ul>
+                    </div>
+                    <div class="col">
+                        <b>
+                            <ul>{{ building.street }}</ul>
+                            <ul>{{ building.number }}</ul>
+                            <ul>{{ building.city }}</ul>
+                            <ul>{{ building.zip_code }}</ul>
+                            <br>
+                            <ul>{{ building.no_of_flats }}</ul>
+                            <br>
+                        </b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#{{ building.cartography.parcel_number }}#}
+    {#    {% for flat in building.flat_set.all %}#}
+    {#       {{ flat.number }}#}
+    {#    {% endfor %}#}
 
 {% endblock content %}

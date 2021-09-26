@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}proEstate - Budynek{% endblock title %}
+
+{% block content %}
+
+    <h2>Profil mieszkania</h2>
+    <br>
+
+    <div class="row align-items-start">
+                    <div class="col">
+
+                        <img src="{{ building.picture.url }}"
+                             class="img-fluid rounded-3 float img-fluid max-width: 600px height: auto;"
+                             alt="zdjęcie budynku">
+
+                    </div>
+
+
+                    <div class="col">
+                        <ul>Ulica:</ul>
+                        <ul>Numer:</ul>
+                        <ul>Miasto:</ul>
+                        <ul>Kod pocztowy:</ul>
+                        <br>
+                        <ul>Ilość mieszkań:</ul>
+                        <br>
+                        <ul>
+                            <a href="https://www.google.com/maps/place/{{ building.street }}+{{ building.number }}+{{ building.city }}+{{ building.zip_code }}"
+                               target="_blank">Google Maps</a></ul>
+                    </div>
+                    <div class="col">
+                        <b>
+                            <ul>{{ building.street }}</ul>
+                            <ul>{{ building.number }}</ul>
+                            <ul>{{ building.city }}</ul>
+                            <ul>{{ building.zip_code }}</ul>
+                            <br>
+                            <ul>{{ building.no_of_flats }}</ul>
+                            <br>
+                        </b>
+                    </div>
+                </div>
+
+{% endblock content %}
