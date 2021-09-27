@@ -1,8 +1,9 @@
 from django.contrib import admin
-from Building.models import Building, Cartography, HousingCooperative, Flat, BuildingDocs, BuildingPhotos
+from Building.models import Building, Cartography, HousingCooperative, Flat, BuildingDocs, BuildingPhotos, \
+    PaymentPeriod, Measure
 
 
-# @admin.action(description='Dodaj mieszkania')
+# @admin.action(description='Dodaj wskazania liczików')
 # def create_flats(modeladmin, request, queryset):
 #     queryset.update(status='p')
 
@@ -10,13 +11,26 @@ from Building.models import Building, Cartography, HousingCooperative, Flat, Bui
 class BuildingAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('street', 'number')}
     ordering = ['street']
-    # actions = [create_flats]
 
 
 class FlatAdmin(admin.ModelAdmin):
-    # prepopulated_fields = {'slug': ('building', 'number', 'number_suffix')}
     ordering = ['building', 'number', 'number_suffix']
     exclude = ('building',)
+
+
+class MeasureAdmin(admin.ModelAdmin):
+    exclude = ('flat',)
+
+    list_filter = [
+        "flat",
+        "flat__building",
+        "payment_period__year",
+        "payment_period__month",
+    ]
+    search_fields = (
+        "flat__number",
+        "flat__building__street",
+    )
 
 
 admin.site.register(Flat, FlatAdmin)
@@ -25,3 +39,5 @@ admin.site.register(BuildingDocs)
 admin.site.register(BuildingPhotos)
 admin.site.register(Cartography)
 admin.site.register(HousingCooperative)
+admin.site.register(PaymentPeriod)
+admin.site.register(Measure, MeasureAdmin)

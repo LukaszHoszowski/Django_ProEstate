@@ -50,6 +50,7 @@ class ProfileCreateAdditionalView(LoginRequiredMixin, CreateView):
 
 
 class FlatFormView(FormView):
+    model = Profile
     template_name = 'User/profile_create_flat.html'
     form_class = ProfileFlatForm
     context_object_name = 'flat'

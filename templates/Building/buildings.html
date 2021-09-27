@@ -10,7 +10,7 @@
                     <div class="text-left fw-bold">{{ building|upper }}</div>
                     <br>
                     <a href="{% url 'Building:building_details' building.slug %}" class="link-secondary text-left">
-                        <img src="{{ building.picture.url }}" class="rounded-3 float img-fluid"
+                        <img src="{{ building.picture.url|default_if_none:"brak zdjęcia" }}" class="rounded-3 float img-fluid"
                              style="max-width: 200px; height: auto;" alt="budynek">
                     </a>
                     <br>

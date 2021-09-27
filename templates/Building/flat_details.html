@@ -1,45 +1,111 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}proEstate - Budynek{% endblock title %}
 
 {% block content %}
 
-    <h2>Profil mieszkania</h2>
+    <h6><a href="{% url 'Building:building_details' flat.building.slug %}"
+           class="link-secondary"><i>{{ flat.building }}</i></a> / <i>
+        {{ flat.number }}{{ flat.number_suffix|default_if_none:'' }}</i></h6>
     <br>
 
     <div class="row align-items-start">
-                    <div class="col">
+        <div class="col">
+            <ul>Powierzchnia:</ul>
+            <ul>Piętro:</ul>
+            <ul>Własność:</ul>
+            <br>
+            <ul>Gaz:</ul>
+            <ul>Prąd:</ul>
+            <ul>Woda:</ul>
+            <ul>Typ ogrzewania:</ul>
+            <ul>Ogrzewanie wody z CO:</ul>
+            <br>
+            <ul>Mieszkańcy:</ul>
+        </div>
+        <div class="col">
+            <b>
+                <ul>{{ flat.area|default:"n/a" }} m<sup>2</sup></ul>
+                <ul>{{ flat.floor|default:"n/a" }}</ul>
+                <ul>{{ flat.get_ownership_type_display }}</ul>
+                <br>
+                <ul>
+                    {% if flat.natural_gas == True %}
+                        <img src="{% static 'true.svg' %}" style="height: 20px; width: auto;" alt="">
+                    {% else %}
+                        <img src="{% static 'false.svg' %}" style="height: 20px; width: auto;" alt="">
+                    {% endif %}
+                </ul>
+                <ul>
+                    {% if flat.electricity == True %}
+                        <img src="{% static 'true.svg' %}" style="height: 20px; width: auto;" alt="">
+                    {% else %}
+                        <img src="{% static 'false.svg' %}" style="height: 20px; width: auto;" alt="">
+                    {% endif %}
+                </ul>
+                <ul>
+                    {% if flat.water == True %}
+                        <img src="{% static 'true.svg' %}" style="height: 20px; width: auto;" alt="">
+                    {% else %}
+                        <img src="{% static 'false.svg' %}" style="height: 20px; width: auto;" alt="">
+                    {% endif %}
+                </ul>
+                <ul>{{ flat.get_heating_type_display }}</ul>
+                <ul>
+                    {% if flat.water_heating == True %}
+                        <img src="{% static 'true.svg' %}" style="height: 20px; width: auto;" alt="">
+                    {% else %}
+                        <img src="{% static 'false.svg' %}" style="height: 20px; width: auto;" alt="">
+                    {% endif %}
+                </ul>
+                <br>
+                {% for user in flat.profile_set.all %}
+                    <ul><b>{{ user|title }}</b></ul>
+                {% empty %}
+                    <ul>Nie dodano jeszcze mieszkańców, <br><br>
+                        <a href="#" class="link-secondary">dodaj</a></ul>
+                {% endfor %}
+                <br>
+            </b>
+        </div>
 
-                        <img src="{{ building.picture.url }}"
-                             class="img-fluid rounded-3 float img-fluid max-width: 600px height: auto;"
-                             alt="zdjęcie budynku">
+        <div class="col">
 
-                    </div>
+            <table class="table">
+
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+
+                    <th scope="col"><img src="{% static 'gas.jpg' %}" style="height: 20px; width: auto;" alt="">
+                    </th>
+                    <th scope="col"><img src="{% static 'energy.png' %}" style="height: 20px; width: auto;"
+                                         alt="">
+                    </th>
+                    <th scope="col"><img src="{% static 'water.png' %}" style="height: 20px; width: auto;"
+                                         alt="">
+                    </th>
+
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for measure in flat.measure_set.all|dictsort:"payment_period.month" %}
+                    <tr>
+                        <th scope="row">{{ measure.payment_period.get_month_display }}</th>
+                        <td>{{ measure.gas|default_if_none:0 }} m<sup>3</sup></td>
+                        <td>{{ measure.energy|default_if_none:0 }} kWh</td>
+                        <td>{{ measure.water|default_if_none:0 }} m<sup>3</sup></td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
 
-                    <div class="col">
-                        <ul>Ulica:</ul>
-                        <ul>Numer:</ul>
-                        <ul>Miasto:</ul>
-                        <ul>Kod pocztowy:</ul>
-                        <br>
-                        <ul>Ilość mieszkań:</ul>
-                        <br>
-                        <ul>
-                            <a href="https://www.google.com/maps/place/{{ building.street }}+{{ building.number }}+{{ building.city }}+{{ building.zip_code }}"
-                               target="_blank">Google Maps</a></ul>
-                    </div>
-                    <div class="col">
-                        <b>
-                            <ul>{{ building.street }}</ul>
-                            <ul>{{ building.number }}</ul>
-                            <ul>{{ building.city }}</ul>
-                            <ul>{{ building.zip_code }}</ul>
-                            <br>
-                            <ul>{{ building.no_of_flats }}</ul>
-                            <br>
-                        </b>
-                    </div>
-                </div>
+        </div>
+    </div>
 
 {% endblock content %}
