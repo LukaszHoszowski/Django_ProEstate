@@ -2,7 +2,7 @@ from django.urls import path
 
 from User import views
 from User.views import SignUpView, ProfileView, UserLoginView, UserLogoutView, UpdatePassword, \
-    ProfileCreateAdditionalView, FlatUserUpdateView, FlatFormView
+    ProfileCreateAdditionalView, FlatUserUpdateView, FlatFormView, DeleteUser
 
 app_name = 'User'
 urlpatterns = [
@@ -15,6 +15,6 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='user_login'),
     path('logout/', UserLogoutView.as_view(), name='user_logout'),
     path('pass_change/', UpdatePassword.as_view(), name='pass_change'),
-
+    path('delete_user/', DeleteUser.as_view(), name='delete_user'),
     # path('ajax/load-flats/', views.load_flats, name='ajax_load_flats'),
 ]

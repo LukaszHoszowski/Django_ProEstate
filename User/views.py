@@ -1,13 +1,14 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, FormView, ListView, UpdateView, DetailView
+from django.views.generic import CreateView, FormView, ListView, UpdateView, DetailView, DeleteView
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 
-from Building.models import Flat
+from Building.models import Flat, Building
 from User.forms import SignUpForm, ProfileFormAdditional, ProfileFlatForm
 from User.models import Profile
 
@@ -25,15 +26,9 @@ class SignUpView(CreateView):
         return valid
 
 
-class UpdatePassword(LoginRequiredMixin, PasswordChangeView):
-    form_class = PasswordChangeForm
-    success_url = reverse_lazy('User:signup')
-    template_name = 'User/change_pass.html'
-
-
 class ProfileCreateAdditionalView(LoginRequiredMixin, CreateView):
     form_class = ProfileFormAdditional
-    success_url = reverse_lazy('User:profile_creation_flat/')
+    success_url = reverse_lazy('User:profile_create_flat/')
     template_name = 'User/profile_create_additional.html'
 
     def form_valid(self, form):
@@ -49,11 +44,16 @@ class ProfileCreateAdditionalView(LoginRequiredMixin, CreateView):
         return self.request.user
 
 
-class FlatFormView(FormView):
+class FlatFormView(UpdateView):
     model = Profile
     template_name = 'User/profile_create_flat.html'
     form_class = ProfileFlatForm
     context_object_name = 'user'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['buildings'] = Building.objects.all()
+        return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -70,6 +70,7 @@ class FlatFormView(FormView):
     def get_success_url(self):
         return reverse_lazy('Building:flat_details', kwargs={'slug': self.kwargs.get('slug'),
                                                              'pk': self.kwargs.get('pk')})
+
 
 # class FlatFormView(LoginRequiredMixin, UpdateView):
 #     form_class = ProfileFlatForm
@@ -168,6 +169,21 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     success_url = reverse_lazy('User:main')
+
+
+class UpdatePassword(LoginRequiredMixin, PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('User:signup')
+    template_name = 'User/change_pass.html'
+
+
+class DeleteUser(LoginRequiredMixin, DeleteView):
+    model = User
+    success_url = reverse_lazy('User:user_logout')
+    template_name = 'User/user_confirm_delete.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 class MainView(View):
