@@ -29,6 +29,9 @@
                 </li>
             </ul>
         </div>
+
+        {% if building.cartography %}
+
         <div class="card-body">
             <div class="container">
                 <br>
@@ -54,9 +57,9 @@
                     </div>
                     <div class="col">
                         <b>
-                            <ul>{{ building.cartography.parcel_identification_number }}</ul>
-                            <ul>{{ building.cartography.get_parcel_precinct_display }}</ul>
-                            <ul>{{ building.cartography.parcel_number }}</ul>
+                            <ul>{{ building.cartography.parcel_identification_number|default:"brak danych" }}</ul>
+                            <ul>{{ building.cartography.get_parcel_precinct_display|default:"brak danych" }}</ul>
+                            <ul>{{ building.cartography.parcel_number|default:"brak danych" }}</ul>
                             <br>
 
                         </b>
@@ -64,6 +67,18 @@
                 </div>
             </div>
         </div>
+        {% else %}
+            <div class="card-body">
+                <div class="container">
+
+                    <div class="row align-items-start">
+                        <div class="col">
+                            Nie dodano jeszcze danych kartograficznych
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
 {#{{ building.cartography.parcel_number }}#}

@@ -30,6 +30,54 @@ HEATING_TYPES = [
     (4, 'Węglowe'),
 ]
 
+PAYMENT_MONTHS = [
+    (1, 'Styczeń'),
+    (2, 'Luty'),
+    (3, 'Marzec'),
+    (4, 'Kwiecień'),
+    (5, 'Maj'),
+    (6, 'Czerwiec'),
+    (7, 'Lipiec'),
+    (8, 'Sierpień'),
+    (9, 'Wrzesień'),
+    (10, 'Październik'),
+    (11, 'Listopad'),
+    (12, 'Grudzień'),
+]
+
+PAYMENT_YEARS = [
+    (1, "2021"),
+    (2, "2022")
+]
+
+
+class PaymentPeriod(models.Model):
+    month = models.SmallIntegerField(choices=PAYMENT_MONTHS, verbose_name='Miesiąc rozliczeniowy')
+    year = models.SmallIntegerField(choices=PAYMENT_YEARS, verbose_name='Rok rozliczeniowy')
+
+    def __str__(self):
+        return f'{self.get_year_display()} - {self.get_month_display()}'
+
+    class Meta:
+        ordering = ('year', '-month')
+        verbose_name = 'Okres rozliczeniowy'
+        verbose_name_plural = 'Okresy rozliczeniowe'
+
+
+class Measure(models.Model):
+    gas = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Gaz')
+    energy = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Prąd')
+    water = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Woda')
+    payment_period = models.ForeignKey('PaymentPeriod', on_delete=models.CASCADE, verbose_name='Okres rozliczeniowy')
+    flat = models.ForeignKey('Flat', on_delete=models.CASCADE, null=True, blank=True, verbose_name='Mieszkanie')
+
+    def __str__(self):
+        return f'{self.flat} - {self.payment_period}'
+
+    class Meta:
+        verbose_name = 'Wskazania licznika'
+        verbose_name_plural = 'Wskazania liczników'
+
 
 class Building(models.Model):
     street = models.CharField(max_length=100, verbose_name='Ulica')
@@ -37,7 +85,7 @@ class Building(models.Model):
     city = models.CharField(max_length=100, verbose_name='Miasto')
     zip_code = models.CharField(max_length=6, verbose_name='Kod pocztowy')
     no_of_flats = models.PositiveIntegerField(verbose_name='Ilość mieszkań w budynku')
-    picture = models.ImageField(upload_to='images/buildings/', verbose_name='Zdjęcie budynku', blank=True)
+    picture = models.ImageField(upload_to='images/buildings/', verbose_name='Zdjęcie budynku')
     housing_cooperative = models.ForeignKey('HousingCooperative', on_delete=models.SET_NULL, null=True, blank=True,
                                             verbose_name='Wspólnota/zarządca')
     slug = models.SlugField(null=False, unique=True)
@@ -144,10 +192,8 @@ class Flat(models.Model):
     natural_gas = models.BooleanField(default=True, verbose_name='Gaz')
     electricity = models.BooleanField(default=True, verbose_name='Prąd')
     water = models.BooleanField(default=True, verbose_name='Woda')
-    building = models.ForeignKey(Building, on_delete=models.CASCADE, verbose_name='Budynek')
+    building = models.ForeignKey('Building', on_delete=models.CASCADE, verbose_name='Budynek')
     slug = models.SlugField(null=False, unique=True)
-
-    # user = models.ManyToManyField(User, blank=True, verbose_name='Mieszkańcy')
 
     def __str__(self):
         return f'{self.building}/{self.number}{self.number_suffix if self.number_suffix else ""}'
@@ -156,6 +202,19 @@ class Flat(models.Model):
         return reverse('flat_detail', kwargs={'slug': self.slug})
 
     class Meta:
-        ordering = ['number']
+        ordering = ['building', 'number']
         verbose_name = 'Mieszkanie'
         verbose_name_plural = 'Mieszkania'
+
+    def generate_measure_placeholders(self):
+        for measure in range(12):
+            payment_period = PaymentPeriod.objects.all()
+            Measure.objects.create(flat=self, payment_period=payment_period[measure])
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        creation = self.id is None
+        super().save(force_insert, force_update, using,
+                     update_fields)
+        if creation:
+            self.generate_measure_placeholders()

@@ -4,14 +4,23 @@
 {% block title %}proEstate - Rejestracja użytkownika{% endblock title %}
 
 {% block content %}
-    <h2>Rejestracja użytkownika</h2>
-    <br>
-    <form method="post">
-        {% csrf_token %}
-        {{ form | crispy }}
-        <br><br>
-        <input class="btn btn-secondary" type="submit" value="Zarejestruj">
-        <br><br>
-{#        <a href="{% url 'home' %}">Home</a>#}
-    </form>
+    <div class="container align-content-center">
+        <div class="row align-content-center">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <h2>Rejestracja użytkownika</h2>
+                <br>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <br>
+                    <input class="btn btn-secondary" type="submit" value="Zarejestruj">
+                    <br>
+                </form>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+    </div>
 {% endblock content %}

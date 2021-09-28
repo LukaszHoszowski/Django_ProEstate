@@ -4,16 +4,20 @@
 {% block title %}proEstate - Tworzenie profilu{% endblock title %}
 
 {% block content %}
-    <h2>Tworzenie profilu 3/3</h2>
+    <h2>Dodawanie mieszkań</h2>
     <br>
-    <h6>Wybierz swój lokal</h6>
-    <br>
-    <form method="post" action="">
+
+    {% for building in buildings %}
+        <ul>{{ building }}</ul>
+    {% endfor %}
+
+    <form method="post">
         {% csrf_token %}
-        {{ form | crispy }}
-        <br><br>
-        <input class="btn btn-secondary" type="submit" value="Zapisz">
-        <br><br>
-{#        <a href="{% url 'home' %}">Home</a>#}
+        <table>
+            {{ form|crispy }}
+        </table>
+        <input class="btn btn-secondary" type="submit" value="Dodaj">
     </form>
 {% endblock content %}
+
+{# action="{% url 'Building:flat_details' slug=user.flat.building.slug pk=user.flat.pk %}#}
