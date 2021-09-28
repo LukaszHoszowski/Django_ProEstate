@@ -53,7 +53,7 @@ class FlatFormView(FormView):
     model = Profile
     template_name = 'User/profile_create_flat.html'
     form_class = ProfileFlatForm
-    context_object_name = 'flat'
+    context_object_name = 'user'
 
     def form_valid(self, form):
         form.instance.user = self.request.user

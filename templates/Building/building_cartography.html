@@ -29,6 +29,9 @@
                 </li>
             </ul>
         </div>
+
+        {% if building.cartography %}
+
         <div class="card-body">
             <div class="container">
                 <br>
@@ -64,6 +67,18 @@
                 </div>
             </div>
         </div>
+        {% else %}
+            <div class="card-body">
+                <div class="container">
+
+                    <div class="row align-items-start">
+                        <div class="col">
+                            Nie dodano jeszcze danych kartograficznych
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
 {#{{ building.cartography.parcel_number }}#}
