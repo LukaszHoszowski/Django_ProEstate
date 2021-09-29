@@ -16,6 +16,7 @@
                     {% csrf_token %}
                     {{ form | crispy }}
                     <br>
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <input class="btn btn-secondary" type="submit" value="Zapisz">
                     <br>
                 </form>
