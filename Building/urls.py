@@ -5,6 +5,7 @@ from Building.views import BuildingListView, BuildingDetailView, \
     BuildingDocsCreate, BuildingFlatsView, FlatDetailView, FlatUpdateView
 
 app_name = 'Building'
+
 urlpatterns = [
     path('', BuildingListView.as_view(), name='buildings'),
     path('<slug:slug>/', BuildingDetailView.as_view(), name='building_details'),

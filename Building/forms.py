@@ -10,7 +10,6 @@ class BuildingPhotosForm(forms.ModelForm):
     class Meta:
         model = BuildingPhotos
         exclude = ['building']
-        # fields = '__all__'
         labels = {
             'picture_description': 'Opis zdjęcia',
             'picture': '',
@@ -31,6 +30,25 @@ class FlatUpdateForm(forms.ModelForm):
     class Meta:
         model = Flat
         exclude = ['building', 'slug', 'number']
-        # labels = {
-        #     'building': 'Budynek',
-        # }
+        help_texts = {
+            'number_suffix': 'podaj suffix mieszkania jeśli istnieje',
+            'area': 'powierzchnia w ㎡',
+            'floor': 'piętro',
+            'ownership_type': 'typ własności',
+            'heating_type': 'typ ogrzewania',
+            'water_heating': 'podgrzewanie wody z CO',
+            'natural_gas': 'gaz',
+            'electricity': 'prad',
+            'water': 'woda',
+        }
+        labels = {
+            'number_suffix': '',
+            'area': '',
+            'floor': '',
+            'ownership_type': '',
+            'heating_type': '',
+            'water_heating': '',
+            'natural_gas': '',
+            'electricity': '',
+            'water': '',
+        }

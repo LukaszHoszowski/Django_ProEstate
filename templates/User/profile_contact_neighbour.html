@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}proEstate - Zgłoś awarię{% endblock title %}
+{% block title %}proEstate - Prośba o kontakt z wybranym sąsiadem{% endblock title %}
 
 {% block content %}
 
@@ -10,7 +10,7 @@
             <div class="col-sm">
             </div>
             <div class="col-sm">
-                <h2>Zgłoszenie awarii</h2>
+                <h2>Prośba o kontakt z wybranym sąsiadem</h2>
                 <br>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}

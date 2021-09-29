@@ -61,7 +61,7 @@ class ProfileFlatForm(forms.ModelForm):
         }
 
 
-class EmailForm(forms.Form):
+class ReportFailureForm(forms.Form):
     FAILURES = [
         ('Wybierz typ awarii', 'Wybierz typ awarii'),
         ('Zalanie', 'Zalanie'),
@@ -69,40 +69,19 @@ class EmailForm(forms.Form):
     ]
 
     failure_building = forms.ModelChoiceField(queryset=Building.objects.all(), label='',
-    empty_label = 'Wybierz budynek którego dotyczy awaria', required = False)
+                                              empty_label='Wybierz budynek którego dotyczy awaria', required=False)
     failure_flat = forms.CheckboxInput()
     failure_type = forms.ChoiceField(choices=FAILURES, label='', required=False)
     # subject = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Temat wiadomości'}))
     message = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Treść wiadomości'}))
 
-    # class FlatUserForm(forms.ModelForm):
-    #     class Meta:
-    #         model = Flat
-    #         fields = ('building', 'flat')
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['flat'].queryset = Flat.objects.none()
-    #     # self.fields['building'].queryset = Flat.objects.none()
+class ContactNeighbourForm(forms.Form):
+    flat = forms.ModelChoiceField(queryset=Flat.objects.all(), label='', empty_label='Wybierz sąsiada',
+                                             required=True,
+                                             help_text="Po kliknięciu WYŚLIJ, Twoje dane kontaktowe zostaną przekazane mieszkańcom wybranego lokalu.")
 
-    # class ProfileFormBuilding(forms.ModelForm):
-    #     class Meta:
-    #         model = Profile
-    #         fields = ['building']
-    #         labels = {
-    #             'building': 'Budynek',
-    #         }
-
-    # class ProfileFormFlat(forms.ModelForm):
-    #     class Meta:
-    #         model = Profile
-    #         fields = ['flat']
-    #         # fields = '__all__'
-    #         labels = {
-    #             'flat': 'Mieszkanie',
-    #         }
-
-    # def __init__(self, *args, buildings=None, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     if buildings is not None:
-    #         self.fields['flat'].queryset = Flat.objects.filter(building__id__in=buildings)
+    # failure_flat = forms.CheckboxInput()
+    # failure_type = forms.ChoiceField(choices=FAILURES, label='', required=False)
+    # # subject = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Temat wiadomości'}))
+    # message = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Treść wiadomości'}))

@@ -2,15 +2,16 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, FormView, ListView, UpdateView, DetailView, DeleteView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 
 from Building.models import Flat, Building
-from User.forms import SignUpForm, ProfileFormAdditional, ProfileFlatForm, EmailForm
+from User.forms import SignUpForm, ProfileFormAdditional, ProfileFlatForm, ReportFailureForm, ContactNeighbourForm
 from User.models import Profile
 from proestate.settings import EMAIL_HOST_USER
 
@@ -87,6 +88,7 @@ class FlatFormView(UpdateView):
 
 class FlatUserUpdateView(UpdateView):
     model = Flat
+    context_object_name = 'flat'
     template_name = 'User/profile_create_flat.html'
     success_url = reverse_lazy('User:signup')
 
@@ -129,30 +131,67 @@ class MainView(View):
         return render(request, 'main.html')
 
 
-class ContactView(View):
+class ReportFailureView(LoginRequiredMixin, View):
     def get(self, request):
-        form = EmailForm()
-        return render(request, 'User/profile_contact.html', {'form': form})
+        form = ReportFailureForm()
+        return render(request, 'User/profile_report_failure.html', {'form': form})
 
     def post(self, request):
-        form = EmailForm(request.POST)
+        form = ReportFailureForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             subject = f"Zgłoszenie awarii - {cd['failure_building']} - {cd['failure_type']}"
             message = cd['message']
             message += f"""
             
-            urzytkownik:    {self.request.user.first_name} {self.request.user.last_name} / {self.request.user.email} / {self.request.user}
+            użytkownik:     {self.request.user.first_name} {self.request.user.last_name} / {self.request.user.email} / {self.request.user}
             budynek:        {cd['failure_building']}
+            mieszkanie:     {self.request.user.profile.flat.first()}
             typ awarii:     {cd['failure_type']}
             
             """
-
             send_mail(subject, message, EMAIL_HOST_USER, [EMAIL_HOST_USER])
-            messageSent = True
         else:
-            form = EmailForm()
-        return render(request, 'User/profile_contact.html', {
-            'form': form,
-            'messageSent': messageSent,
-        })
+            form = ReportFailureForm()
+            return render(request, 'User/profile_report_failure.html', {
+                'form': form,
+            })
+
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next)
+
+
+class ContactNeighbourView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = ContactNeighbourForm()
+        return render(request, 'User/profile_contact_neighbour.html', {'form': form})
+
+    def post(self, request):
+        form = ContactNeighbourForm(request.POST)
+
+        if form.is_valid():
+            recipients_query = Profile.objects.filter(flat__profile=form['flat'].value())
+            recipients = [recipient.user.email for recipient in recipients_query]
+
+            subject = f"Prośba o kontakt od użytkownika {self.request.user.first_name} {self.request.user.last_name} ({self.request.user})"
+
+            message = f"""Witam,
+            
+Jestem Państwa sąsiadem z mieszkania {self.request.user.profile.flat.first()}. 
+Bardzo proszę o kontakt pod poniższym numerem telefonu lub przez pocztę elektroniczną:
+
+Telefon: {self.request.user.profile.phone_number}
+Email: {self.request.user.email} 
+
+Z góry dziękuję i pozdrawiam,
+{self.request.user.first_name.title()} {self.request.user.last_name.title()}
+ """
+            send_mail(subject, message, EMAIL_HOST_USER, recipients)
+        else:
+            form = ContactNeighbourForm()
+            return render(request, 'User/profile_contact_neighbour.html', {
+                'form': form,
+            })
+
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next)
