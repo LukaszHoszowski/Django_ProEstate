@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
-
 {% load crispy_forms_tags %}
 
-{% block title %}proEstate - Budynek{% endblock title %}
+{% block title %}proEstate - Edycja profilu{% endblock title %}
 
 {% block content %}
+
     <div class="container align-content-center">
         <div class="row align-content-center">
             <div class="col-sm">
             </div>
             <div class="col-sm">
-                <form method="post" action="">
-                {% csrf_token %}
-                {{ form | crispy }}
-                <div class="p-3">
+                <h2>Edytuj profil</h2>
+                <br>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <br>
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <input class="btn btn-secondary" type="submit" value="Zapisz">
-                </div>
-            </form>
+                    <br>
+                </form>
             </div>
             <div class="col-sm">
             </div>
         </div>
     </div>
-
 {% endblock content %}

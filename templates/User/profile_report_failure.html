@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}proEstate - Budynek{% endblock title %}
+{% block title %}proEstate - Zgłoś awarię{% endblock title %}
 
 {% block content %}
 
@@ -10,14 +10,15 @@
             <div class="col-sm">
             </div>
             <div class="col-sm">
-                <h2>Dodaj zdjęcie</h2>
-                <br>
+                <h2>Zgłoszenie awarii</h2>
                 <br>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form | crispy }}
                     <br>
-                    <input class="btn btn-secondary" type="submit" value="Zapisz">
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    <input class="btn btn-secondary" type="submit" value="Wyślij">
+                    <br>
                 </form>
             </div>
             <div class="col-sm">

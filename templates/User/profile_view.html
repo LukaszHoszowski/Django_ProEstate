@@ -13,7 +13,7 @@
         <div class="row align-items-start">
             <div class="col">
                 <div class="circle-img rounded-circle">
-                    <img src="{{ object.avatar.url }}" class="img-fluid max-width: 150px height: auto;" alt="avatar">
+                    <img src="{{ object.avatar.url|default_if_none:'#' }}" class="img-fluid max-width: 150px height: auto;" alt="avatar">
                 </div>
             </div>
             <div class="col">
@@ -33,11 +33,11 @@
             </div>
             <div class="col">
                 {% for flat in object.flat.all %}
-                    <b>{{ flat }}</b>
+                    <b><a href="{{ flat.get_absolute_url }}" class="link-secondary">{{ flat }}</a></b>
                 {% empty %}
                     Nie dodałeś żadnych mieszkań.
                     <br>
-                    <b><a href="{% url 'User:profile_create_building' %}">Dodaj mieszkanie</a></b>
+                    <b><a href="{% url 'User:profile_creation_flat' %}">Dodaj mieszkanie</a></b>
                 {% endfor %}
             </div>
         </div>

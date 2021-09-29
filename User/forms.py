@@ -60,36 +60,40 @@ class ProfileFlatForm(forms.ModelForm):
             'flat': 'Wybierz swoje mieszkanie',
         }
 
-# class FlatUserForm(forms.ModelForm):
-#     class Meta:
-#         model = Flat
-#         fields = ('building', 'flat')
 
-# def __init__(self, *args, **kwargs):
-#     super().__init__(*args, **kwargs)
-#     self.fields['flat'].queryset = Flat.objects.none()
-#     # self.fields['building'].queryset = Flat.objects.none()
+class ReportFailureForm(forms.Form):
+    FAILURES = [
+        ('Wybierz typ awarii', 'Wybierz typ awarii'),
+        ('Zalanie', 'Zalanie'),
+        ('Uszkodzenie', 'Uszkodzenie')
+    ]
 
-
-# class ProfileFormBuilding(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = ['building']
-#         labels = {
-#             'building': 'Budynek',
-#         }
+    failure_building = forms.ModelChoiceField(queryset=Building.objects.all(), label='',
+                                              empty_label='Wybierz budynek którego dotyczy awaria', required=False)
+    failure_flat = forms.CheckboxInput()
+    failure_type = forms.ChoiceField(choices=FAILURES, label='', required=False)
+    message = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Treść wiadomości'}))
 
 
-# class ProfileFormFlat(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = ['flat']
-#         # fields = '__all__'
-#         labels = {
-#             'flat': 'Mieszkanie',
-#         }
+class ContactNeighbourForm(forms.Form):
+    flat = forms.ModelChoiceField(queryset=Flat.objects.all(), label='', empty_label='Wybierz sąsiada',
+                                             required=True,
+                                             help_text="Po kliknięciu WYŚLIJ, Twoje dane kontaktowe zostaną przekazane mieszkańcom wybranego lokalu.")
 
-# def __init__(self, *args, buildings=None, **kwargs):
-#     super().__init__(*args, **kwargs)
-#     if buildings is not None:
-#         self.fields['flat'].queryset = Flat.objects.filter(building__id__in=buildings)
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['phone_number', 'contact_flag', 'avatar', 'flat']
+        labels = {
+            'phone_number': '',
+            'contact_flag': '',
+            'avatar': '',
+            'flat': '',
+        }
+        help_texts = {
+            'phone_number': 'numer telefonu',
+            'contact_flag': 'zgoda na udostepnienie danych kontaktowych innym mieszkańcom',
+            'avatar': 'twój avatar',
+            'flat': 'Wybierz swoje mieszkania',
+        }

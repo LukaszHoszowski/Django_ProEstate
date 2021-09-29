@@ -47,7 +47,6 @@
 
                         <div class="col">
                             <ul>Nazwa:</ul>
-                            <ul>Prezes:</ul>
                             <br>
                             <ul>Ulica:</ul>
                             <ul>Numer:</ul>
@@ -59,12 +58,11 @@
                             <br>
                             <ul>
                                 <a href="{{ building.housing_cooperative.website }}"
-                                   target="_blank">Strona zarządcy</a></ul>
+                                   target="_blank" class="link-secondary">Strona zarządcy</a></ul>
                         </div>
                         <div class="col">
                             <b>
                                 <ul>{{ building.housing_cooperative.name }}</ul>
-                                <ul>{{ building.housing_cooperative.president|default:"Jakiś Rysiek" }}</ul>
                                 <br>
                                 <ul>{{ building.housing_cooperative.street }}</ul>
                                 <ul>{{ building.housing_cooperative.number }}</ul>
@@ -91,13 +89,6 @@
                 </div>
             </div>
         {% endif %}
-        </div>
-
-        {#    {%  endfor %}#}
-
-        {#{{ building.cartography.parcel_number }}#}
-        {#    {% for flat in building.flat_set.all %}#}
-        {#       {{ flat.number }}#}
-        {#    {% endfor %}#}
+    </div>
 
 {% endblock content %}

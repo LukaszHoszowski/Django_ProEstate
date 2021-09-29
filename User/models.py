@@ -12,7 +12,8 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
     token = models.CharField(max_length=100, default=None, blank=True, null=True)
-    avatar = models.ImageField(upload_to='images/avatars/', null=True, blank=True, verbose_name='Avatar użytkownika')
+    avatar = models.ImageField(upload_to='images/avatars/', null=True, blank=True,
+                               verbose_name='Avatar użytkownika')
     flat = models.ManyToManyField(Flat, blank=True)
 
     def __str__(self):

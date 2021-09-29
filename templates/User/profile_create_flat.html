@@ -7,9 +7,9 @@
     <h2>Dodawanie mieszkań</h2>
     <br>
 
-    {% for building in buildings %}
-        <ul>{{ building }}</ul>
-    {% endfor %}
+{#    {% for building in buildings %}#}
+{#        <ul>{{ building }}</ul>#}
+{#    {% endfor %}#}
 
     <form method="post">
         {% csrf_token %}
@@ -20,4 +20,4 @@
     </form>
 {% endblock content %}
 
-{# action="{% url 'Building:flat_details' slug=user.flat.building.slug pk=user.flat.pk %}#}
+{# action="{% url 'Building:flat_update' slug=user.flat.building.slug pk=profile.flat.pk %}#}

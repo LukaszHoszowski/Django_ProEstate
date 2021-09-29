@@ -4,19 +4,37 @@
 {% block title %}proEstate - Budynek{% endblock title %}
 
 {% block content %}
-
-        <div class="card-body">
-            <div class="container">
-                <div class="row p-3">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form | crispy }}
-                        <br><br>
-                        <input class="btn btn-secondary" type="submit" value="Zapisz">
-                        <br><br>
-                    </form>
-                </div>
+    <div class="container align-content-center">
+        <div class="row align-content-center">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <h2>Dodaj dokument</h2>
+                <br>
+                <br>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <br>
+                    <input class="btn btn-secondary" type="submit" value="Zapisz">
+                </form>
+            </div>
+            <div class="col-sm">
             </div>
         </div>
+    </div>
+{#    <div class="card-body">#}
+{#        <div class="container">#}
+{#            <div class="row p-3">#}
+{#                <form method="post" enctype="multipart/form-data">#}
+{#                    {% csrf_token %}#}
+{#                    {{ form | crispy }}#}
+{#                    <br><br>#}
+{#                    <input class="btn btn-secondary" type="submit" value="Zapisz">#}
+{#                    <br><br>#}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
 {% endblock content %}

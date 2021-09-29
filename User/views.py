@@ -1,16 +1,20 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, FormView, ListView, UpdateView, DetailView, DeleteView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, FormView
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 
 from Building.models import Flat, Building
-from User.forms import SignUpForm, ProfileFormAdditional, ProfileFlatForm
+from User.forms import SignUpForm, ProfileFormAdditional, ProfileFlatForm, ReportFailureForm, ContactNeighbourForm, \
+    ProfileUpdateForm
 from User.models import Profile
+from proestate.settings import EMAIL_HOST_USER
 
 
 class SignUpView(CreateView):
@@ -28,137 +32,84 @@ class SignUpView(CreateView):
 
 class ProfileCreateAdditionalView(LoginRequiredMixin, CreateView):
     form_class = ProfileFormAdditional
-    success_url = reverse_lazy('User:profile_create_flat/')
+    success_url = reverse_lazy('User:profile_creation_flat')
     template_name = 'User/profile_create_additional.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-    def get_initial(self):
-        return {
-            'user': self.request.user,
-        }
-
-    def get_object(self, queryset=None):
-        return self.request.user
-
 
 class FlatFormView(UpdateView):
     model = Profile
     template_name = 'User/profile_create_flat.html'
     form_class = ProfileFlatForm
-    context_object_name = 'user'
+    success_url = reverse_lazy('User:main')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['buildings'] = Building.objects.all()
-        return context
+    def get_object(self, queryset=None):
+        return self.request.user
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-    def get_initial(self):
-        return {
-            'user': self.request.user,
-        }
-
-    def get_object(self, queryset=None):
-        return self.request.user
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['buildings'] = Building.objects.all()
+    #     return context
 
     def get_success_url(self):
-        return reverse_lazy('Building:flat_details', kwargs={'slug': self.kwargs.get('slug'),
-                                                             'pk': self.kwargs.get('pk')})
+        # recipients_query = Profile.objects.filter(flat__profile=form['flat'].value())
+        slug = self.flat.building.slug
+        pk = self.request.user.profile.flat.pk
+        return reverse_lazy('Building:flat_update', kwargs={'slug': str(slug),
+                                                             'pk': pk})
 
 
-# class FlatFormView(LoginRequiredMixin, UpdateView):
-#     form_class = ProfileFlatForm
-#     template_name = 'User/profile_create_flat.html'
-#     success_url = reverse_lazy('User:signup')
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
-#
-#     def get_initial(self):
-#         return {
-#             'user': self.request.user,
-#         }
-#
-#     def get_object(self, queryset=None):
-#         return self.request.user
+
+    # def form_valid(self, form):
+    #     form.instance.user = self.request.user
+    #
+    #     return super().form_valid(form)
+
+    # def get_initial(self):
+    #     return {
+    #         'user': self.request.user,
+    #     }
+
+    # def get_object(self, queryset=None):
+    #     return self.request.user
 
 
-class FlatUserUpdateView(UpdateView):
+
+class FlatUserUpdateView(LoginRequiredMixin, UpdateView):
     model = Flat
+    context_object_name = 'flat'
     template_name = 'User/profile_create_flat.html'
-    success_url = reverse_lazy('User:signup')
+    success_url = reverse_lazy('Building:flat_details')
 
 
-# def load_flats(request):
-#     building_id = request.GET.get('building')
-#     flats = Flat.objects.filter(building_id=building_id).order_by('street', 'number')
-#     return render(request, 'User/flat_building_list.html', {'flats': flats})
 
-
-# class ProfileCreateBuildingView(LoginRequiredMixin, UpdateView):
-#     form_class = ProfileFormBuilding
-#     success_url = reverse_lazy('User:profile_create_flat')
-#     template_name = 'User/profile_create_building.html'
-#
-#     def get_object(self, queryset=None):
-#         return self.request.user.profile
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
-#
-#     def get_initial(self):
-#         return {
-#             'user': self.request.user,
-#         }
-
-
-# class ProfileCreateFlatView(LoginRequiredMixin, UpdateView):
-#     model = Profile
-#     form_class = ProfileFormFlat
-#     # success_url = reverse_lazy('User:profile')
-#     template_name = 'User/profile_create_flat.html'
-#
-#     def get_object(self, queryset=None):
-#         return self.request.user.profile
-#
-#     def get_success_url(self):
-#         print(self.object, self.object.building.building.slug, self.object.flat.pk)
-#         return reverse_lazy('Building:flat_update',
-#                             kwargs={'slug': self.object.building.building.slug, 'pk': self.object.flat.pk})
-
-
-# def form_valid(self, form):
-#     form.instance.user = self.request.user
-#     return super().form_valid(form)
-#
-# def get_initial(self):
-#     return {
-#         'user': self.request.user,
-#     }
-#
-# def get_form(self, form_class=None):
-#     buildings = self.object.building.all()
-#     form = ProfileFormFlat(buildings=buildings)
-#     return form
+    def get_object(self, queryset=None):
+        return self.request.user.profile
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
     model = Profile
+    exclude = ['is_verified', 'token']
     template_name = 'User/profile_view.html'
 
     def get_object(self, queryset=None):
         return self.request.user.profile
-    #
-    # def get_queryset(self):
-    #     return Profile.objects.get(user=self.request.user)
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    form_class = ProfileUpdateForm
+    template_name = 'User/profile_update_view.html'
+    success_url = reverse_lazy('User:profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
 
 
 class UserLoginView(LoginView):
@@ -189,3 +140,69 @@ class DeleteUser(LoginRequiredMixin, DeleteView):
 class MainView(View):
     def get(self, request):
         return render(request, 'main.html')
+
+
+class ReportFailureView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = ReportFailureForm()
+        return render(request, 'User/profile_report_failure.html', {'form': form})
+
+    def post(self, request):
+        form = ReportFailureForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            subject = f"Zgłoszenie awarii - {cd['failure_building']} - {cd['failure_type']}"
+            message = cd['message']
+            message += f"""
+            
+            użytkownik:     {self.request.user.first_name} {self.request.user.last_name} / {self.request.user.email} / {self.request.user}
+            budynek:        {cd['failure_building']}
+            mieszkanie:     {self.request.user.profile.flat.first()}
+            typ awarii:     {cd['failure_type']}
+            
+            """
+            send_mail(subject, message, EMAIL_HOST_USER, [EMAIL_HOST_USER])
+        else:
+            form = ReportFailureForm()
+            return render(request, 'User/profile_report_failure.html', {
+                'form': form,
+            })
+
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next)
+
+
+class ContactNeighbourView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = ContactNeighbourForm()
+        return render(request, 'User/profile_contact_neighbour.html', {'form': form})
+
+    def post(self, request):
+        form = ContactNeighbourForm(request.POST)
+
+        if form.is_valid():
+            recipients_query = Profile.objects.filter(flat__profile=form['flat'].value())
+            recipients = [recipient.user.email for recipient in recipients_query]
+
+            subject = f"Prośba o kontakt od użytkownika {self.request.user.first_name} {self.request.user.last_name} ({self.request.user})"
+
+            message = f"""Witam,
+            
+Jestem Państwa sąsiadem z mieszkania {self.request.user.profile.flat.first()}. 
+Bardzo proszę o kontakt pod poniższym numerem telefonu lub przez pocztę elektroniczną:
+
+Telefon: {self.request.user.profile.phone_number}
+Email: {self.request.user.email} 
+
+Z góry dziękuję i pozdrawiam,
+{self.request.user.first_name.title()} {self.request.user.last_name.title()}
+ """
+            send_mail(subject, message, EMAIL_HOST_USER, recipients)
+        else:
+            form = ContactNeighbourForm()
+            return render(request, 'User/profile_contact_neighbour.html', {
+                'form': form,
+            })
+
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next)
