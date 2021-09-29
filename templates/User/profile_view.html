@@ -13,7 +13,8 @@
         <div class="row align-items-start">
             <div class="col">
                 <div class="circle-img rounded-circle">
-                    <img src="{{ object.avatar.url|default_if_none:'#' }}" class="img-fluid max-width: 150px height: auto;" alt="avatar">
+                    <img src="{{ object.avatar_url|default_if_none:'#' }}"
+                         class="img-fluid max-width: 150px height: auto;" alt="avatar">
                 </div>
             </div>
             <div class="col">
@@ -23,22 +24,28 @@
             </div>
             <div class="col">
                 <b>
-                <ul>{{ object.user.username }}</ul>
-                <ul>{{ object.user.first_name }}</ul>
-                <ul>{{ object.user.last_name }}</ul>
+                    <ul>{{ object.user.username }}</ul>
+                    <ul>{{ object.user.first_name }}</ul>
+                    <ul>{{ object.user.last_name }}</ul>
                 </b>
             </div>
             <div class="col">
-                Twoje mieszkania:
+                <ul>Twoje mieszkania:</ul>
+
+                <ul><b><a href="{% url 'User:profile_create_flat' %}">
+                    <input type="button" value="Dodaj mieszkania" class="btn btn-success">
+                </a></b></ul>
             </div>
             <div class="col">
-                {% for flat in object.flat.all %}
-                    <b><a href="{{ flat.get_absolute_url }}" class="link-secondary">{{ flat }}</a></b>
+                {% for flat in object.user.flat_set.all %}
+                    <ul><b><a href="{{ flat.get_absolute_url }}" class="link-secondary">{{ flat }}</a></b></ul>
                 {% empty %}
                     Nie dodałeś żadnych mieszkań.
                     <br>
-                    <b><a href="{% url 'User:profile_creation_flat' %}">Dodaj mieszkanie</a></b>
+                    <br>
+                    <br>
                 {% endfor %}
+
             </div>
         </div>
     </div>

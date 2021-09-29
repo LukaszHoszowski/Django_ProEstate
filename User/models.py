@@ -15,5 +15,10 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='images/avatars/', null=True, blank=True,
                                verbose_name='Avatar użytkownika')
 
+    @property
+    def avatar_url(self):
+        if self.avatar and hasattr(self.avatar, 'url'):
+            return self.avatar.url
+
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'

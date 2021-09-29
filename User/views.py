@@ -40,45 +40,6 @@ class ProfileCreateAdditionalView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# class FlatFormView(UpdateView):
-#     model = Profile
-#     template_name = 'User/profile_create_flat.html'
-#     form_class = ProfileFlatForm
-#     success_url = reverse_lazy('User:main')
-#
-#     def get_object(self, queryset=None):
-#         return self.request.user
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
-
-# def get_context_data(self, **kwargs):
-#     context = super().get_context_data(**kwargs)
-#     context['buildings'] = Building.objects.all()
-#     return context
-
-# def get_success_url(self):
-#     # recipients_query = Profile.objects.filter(flat__profile=form['flat'].value())
-#     slug = self.flat.building.slug
-#     pk = self.request.user.profile.flat.pk
-#     return reverse_lazy('Building:flat_update', kwargs={'slug': str(slug),
-#                                                          'pk': pk})
-
-# def form_valid(self, form):
-#     form.instance.user = self.request.user
-#
-#     return super().form_valid(form)
-
-# def get_initial(self):
-#     return {
-#         'user': self.request.user,
-#     }
-
-# def get_object(self, queryset=None):
-#     return self.request.user
-
-
 class FlatUserUpdateView(LoginRequiredMixin, View):
     def get(self, request):
         form = ProfileFlatForm()
@@ -99,21 +60,6 @@ class FlatUserUpdateView(LoginRequiredMixin, View):
             })
 
         return redirect('Building:flat_update', slug=flat.building.slug, pk=flat.pk)
-
-    # return redirect('Building:flat_details', kwargs={'slug': flat.building.slug, 'pk': flat.pk})
-
-
-
-    # def form_valid(self, form):
-    #     form.instance.user = self.request.user
-    #     return super().form_valid(form)
-    #
-    # def get_success_url(self):
-    #     return reverse_lazy('Building:flat_details', kwargs={'slug': self.object.building.slug, 'pk': self.object.pk})
-    #
-    # def get(self, request):
-    #     form = ReportFailureForm()
-    #     return render(request, 'User/profile_report_failure.html', {'form': form})
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
