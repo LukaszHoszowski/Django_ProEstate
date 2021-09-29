@@ -198,7 +198,7 @@ class Flat(models.Model):
         return f'{self.building}/{self.number}{self.number_suffix if self.number_suffix else ""}'
 
     def get_absolute_url(self):
-        return reverse('flat_detail', kwargs={'slug': self.slug})
+        return reverse('Building:flat_details', kwargs={'slug': self.building.slug,  'pk': self.pk})
 
     class Meta:
         ordering = ['building', 'number']

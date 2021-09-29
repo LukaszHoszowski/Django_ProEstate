@@ -81,7 +81,20 @@ class ContactNeighbourForm(forms.Form):
                                              required=True,
                                              help_text="Po kliknięciu WYŚLIJ, Twoje dane kontaktowe zostaną przekazane mieszkańcom wybranego lokalu.")
 
-    # failure_flat = forms.CheckboxInput()
-    # failure_type = forms.ChoiceField(choices=FAILURES, label='', required=False)
-    # # subject = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Temat wiadomości'}))
-    # message = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Treść wiadomości'}))
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['phone_number', 'contact_flag', 'avatar', 'flat']
+        labels = {
+            'phone_number': '',
+            'contact_flag': '',
+            'avatar': '',
+            'flat': '',
+        }
+        help_texts = {
+            'phone_number': 'numer telefonu',
+            'contact_flag': 'zgoda na udostepnienie danych kontaktowych innym mieszkańcom',
+            'avatar': 'twój avatar',
+            'flat': 'Wybierz swoje mieszkania',
+        }

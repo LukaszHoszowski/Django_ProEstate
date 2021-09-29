@@ -78,7 +78,7 @@
                             <ul class="dropdown-menu dropdown-menu-dark"
                                 aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{% url 'User:profile' %}">Profil</a></li>
-                                <li><a class="dropdown-item" href="#">Modyfikuj profil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'User:profile_update' %}">Modyfikuj profil</a></li>
                                 <li><a class="dropdown-item text-warning" href="{% url 'User:pass_change' %}">Zmień hasło</a></li>
                                 <li><a class="dropdown-item text-danger" href="{% url 'User:delete_user' %}">Usuń konto</a></li>
                             </ul>

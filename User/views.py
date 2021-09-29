@@ -6,12 +6,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, FormView
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 
 from Building.models import Flat, Building
-from User.forms import SignUpForm, ProfileFormAdditional, ProfileFlatForm, ReportFailureForm, ContactNeighbourForm
+from User.forms import SignUpForm, ProfileFormAdditional, ProfileFlatForm, ReportFailureForm, ContactNeighbourForm, \
+    ProfileUpdateForm
 from User.models import Profile
 from proestate.settings import EMAIL_HOST_USER
 
@@ -68,34 +69,26 @@ class FlatFormView(UpdateView):
                                                              'pk': self.kwargs.get('pk')})
 
 
-# class FlatFormView(LoginRequiredMixin, UpdateView):
-#     form_class = ProfileFlatForm
-#     template_name = 'User/profile_create_flat.html'
-#     success_url = reverse_lazy('User:signup')
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
-#
-#     def get_initial(self):
-#         return {
-#             'user': self.request.user,
-#         }
-#
-#     def get_object(self, queryset=None):
-#         return self.request.user
-
-
-class FlatUserUpdateView(UpdateView):
+class FlatUserUpdateView(LoginRequiredMixin, UpdateView):
     model = Flat
     context_object_name = 'flat'
     template_name = 'User/profile_create_flat.html'
-    success_url = reverse_lazy('User:signup')
+    success_url = reverse_lazy('Building:flat_update')
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
     model = Profile
+    exclude = ['is_verified', 'token']
     template_name = 'User/profile_view.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    form_class = ProfileUpdateForm
+    template_name = 'User/profile_update_view.html'
+    success_url = reverse_lazy('User:profile')
 
     def get_object(self, queryset=None):
         return self.request.user.profile
