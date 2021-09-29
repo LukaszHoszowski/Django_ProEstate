@@ -72,7 +72,6 @@ class ReportFailureForm(forms.Form):
                                               empty_label='Wybierz budynek którego dotyczy awaria', required=False)
     failure_flat = forms.CheckboxInput()
     failure_type = forms.ChoiceField(choices=FAILURES, label='', required=False)
-    # subject = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Temat wiadomości'}))
     message = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Treść wiadomości'}))
 
 

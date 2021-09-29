@@ -44,36 +44,54 @@ class FlatFormView(UpdateView):
     model = Profile
     template_name = 'User/profile_create_flat.html'
     form_class = ProfileFlatForm
-    context_object_name = 'user'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['buildings'] = Building.objects.all()
-        return context
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-
-        return super().form_valid(form)
-
-    def get_initial(self):
-        return {
-            'user': self.request.user,
-        }
+    success_url = reverse_lazy('User:main')
 
     def get_object(self, queryset=None):
         return self.request.user
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['buildings'] = Building.objects.all()
+    #     return context
+
     def get_success_url(self):
-        return reverse_lazy('Building:flat_details', kwargs={'slug': self.kwargs.get('slug'),
-                                                             'pk': self.kwargs.get('pk')})
+        # recipients_query = Profile.objects.filter(flat__profile=form['flat'].value())
+        slug = self.flat.building.slug
+        pk = self.request.user.profile.flat.pk
+        return reverse_lazy('Building:flat_update', kwargs={'slug': str(slug),
+                                                             'pk': pk})
+
+
+
+    # def form_valid(self, form):
+    #     form.instance.user = self.request.user
+    #
+    #     return super().form_valid(form)
+
+    # def get_initial(self):
+    #     return {
+    #         'user': self.request.user,
+    #     }
+
+    # def get_object(self, queryset=None):
+    #     return self.request.user
+
 
 
 class FlatUserUpdateView(LoginRequiredMixin, UpdateView):
     model = Flat
     context_object_name = 'flat'
     template_name = 'User/profile_create_flat.html'
-    success_url = reverse_lazy('Building:flat_update')
+    success_url = reverse_lazy('Building:flat_details')
+
+
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
