@@ -9,24 +9,21 @@ from User.models import Profile
 class BuildingPhotosForm(forms.ModelForm):
     class Meta:
         model = BuildingPhotos
-        # exclude = ['building']
-        fields = '__all__'
+        exclude = ['building']
+        # fields = '__all__'
         labels = {
             'picture_description': 'Opis zdjęcia',
             'picture': '',
-            'building': ''
         }
 
 
 class BuildingDocsForm(forms.ModelForm):
     class Meta:
         model = BuildingDocs
-        # exclude = ['building']
-        fields = '__all__'
+        exclude = ['building']
         labels = {
             'document_description': 'Opis dokumentu',
             'document': '',
-            'building': ''
         }
 
 

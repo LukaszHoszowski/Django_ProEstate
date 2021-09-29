@@ -40,7 +40,11 @@ class FlatUpdateView(LoginRequiredMixin, UpdateView):
     form_class = FlatUpdateForm
     context_object_name = 'flat'
     template_name = 'Building/flat_update.html'
-    # success_url = reverse_lazy('Building:flat_details', )
+    # success_url = reverse_lazy('Building:flat_details')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('Building:flat_details', kwargs={'slug': self.object.building.slug, 'pk': self.object.pk})
@@ -73,17 +77,11 @@ class BuildingDocsCreate(LoginRequiredMixin, CreateView):
     template_name = 'Building/building_documents_create.html'
 
     def form_valid(self, form):
-        form.instance.piece = Building.objects.get(slug=self.kwargs['slug'])
+        form.instance.building = Building.objects.get(slug=self.kwargs['slug'])
         return super(BuildingDocsCreate, self).form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('Building:building_documents', kwargs={'slug': self.kwargs['slug']})
-
-    def get_initial(self):
-        building = get_object_or_404(Building, slug=self.kwargs.get('slug'))
-        return {
-            'building': building,
-        }
 
 
 class BuildingPhotosView(LoginRequiredMixin, DetailView):
@@ -99,14 +97,8 @@ class BuildingPhotosCreate(LoginRequiredMixin, CreateView):
     template_name = 'Building/building_photos_create.html'
 
     def form_valid(self, form):
-        form.instance.piece = Building.objects.get(slug=self.kwargs['slug'])
+        form.instance.building = Building.objects.get(slug=self.kwargs['slug'])
         return super(BuildingPhotosCreate, self).form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('Building:building_photos', kwargs={'slug': self.kwargs['slug']})
-
-    def get_initial(self):
-        building = get_object_or_404(Building, slug=self.kwargs.get('slug'))
-        return {
-            'building': building,
-        }

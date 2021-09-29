@@ -158,7 +158,6 @@ class Cartography(models.Model):
 
 class HousingCooperative(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nazwa zarządcy/wspólnoty')
-    president = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Prezes')
     street = models.CharField(max_length=100, null=True, verbose_name='Ulica')
     number = models.CharField(max_length=10, null=True, verbose_name='Numer')
     city = models.CharField(max_length=100, null=True, verbose_name='Miasto')
