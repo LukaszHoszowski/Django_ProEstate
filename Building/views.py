@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from Building.forms import BuildingPhotosForm, BuildingDocsForm, FlatUpdateForm
@@ -40,14 +42,27 @@ class FlatUpdateView(LoginRequiredMixin, UpdateView):
     form_class = FlatUpdateForm
     context_object_name = 'flat'
     template_name = 'Building/flat_update.html'
-    # success_url = reverse_lazy('Building:flat_details')
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('Building:flat_details', kwargs={'slug': self.object.building.slug, 'pk': self.object.pk})
+
+
+class FlatAddUserUpdate(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        flat = Flat.objects.get(pk=pk)
+        flat.user.add(request.user)
+        flat.save()
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class FlatDeleteUserUpdate(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        flat = Flat.objects.get(pk=pk)
+        flat.user.remove(request.user)
+        flat.save()
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 class BuildingCartographyView(LoginRequiredMixin, DetailView):

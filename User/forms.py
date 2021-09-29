@@ -49,16 +49,9 @@ class ProfileFormAdditional(forms.ModelForm):
         }
 
 
-class ProfileFlatForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['flat']
-        labels = {
-            'flat': '',
-        }
-        help_texts = {
-            'flat': 'Wybierz swoje mieszkanie',
-        }
+class ProfileFlatForm(forms.Form):
+    flat = forms.ModelChoiceField(queryset=Flat.objects.all(), label='',
+                                              empty_label='Wybierz swoje mieszkanie', required=True)
 
 
 class ReportFailureForm(forms.Form):
@@ -77,23 +70,21 @@ class ReportFailureForm(forms.Form):
 
 class ContactNeighbourForm(forms.Form):
     flat = forms.ModelChoiceField(queryset=Flat.objects.all(), label='', empty_label='Wybierz sąsiada',
-                                             required=True,
-                                             help_text="Po kliknięciu WYŚLIJ, Twoje dane kontaktowe zostaną przekazane mieszkańcom wybranego lokalu.")
+                                  required=True,
+                                  help_text="Po kliknięciu WYŚLIJ, Twoje dane kontaktowe zostaną przekazane mieszkańcom wybranego lokalu.")
 
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone_number', 'contact_flag', 'avatar', 'flat']
+        fields = ['phone_number', 'contact_flag', 'avatar']
         labels = {
             'phone_number': '',
             'contact_flag': '',
             'avatar': '',
-            'flat': '',
         }
         help_texts = {
             'phone_number': 'numer telefonu',
-            'contact_flag': 'zgoda na udostepnienie danych kontaktowych innym mieszkańcom',
+            'contact_flag': 'zgoda na udostępnienie danych kontaktowych innym mieszkańcom',
             'avatar': 'twój avatar',
-            'flat': 'Wybierz swoje mieszkania',
         }

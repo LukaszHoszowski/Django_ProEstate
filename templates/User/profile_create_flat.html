@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}proEstate - Tworzenie profilu{% endblock title %}
+{% block title %}proEstate - Dodawanie mieszkań{% endblock title %}
 
 {% block content %}
     <h2>Dodawanie mieszkań</h2>
     <br>
-
-{#    {% for building in buildings %}#}
-{#        <ul>{{ building }}</ul>#}
-{#    {% endfor %}#}
 
     <form method="post">
         {% csrf_token %}

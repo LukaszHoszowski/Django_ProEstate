@@ -29,7 +29,7 @@ class BuildingDocsForm(forms.ModelForm):
 class FlatUpdateForm(forms.ModelForm):
     class Meta:
         model = Flat
-        exclude = ['building', 'slug', 'number']
+        exclude = ['building', 'slug_flat', 'number', 'user']
         help_texts = {
             'number_suffix': 'podaj suffix mieszkania jeśli istnieje',
             'area': 'powierzchnia w ㎡',
@@ -38,7 +38,7 @@ class FlatUpdateForm(forms.ModelForm):
             'heating_type': 'typ ogrzewania',
             'water_heating': 'podgrzewanie wody z CO',
             'natural_gas': 'gaz',
-            'electricity': 'prad',
+            'electricity': 'prąd',
             'water': 'woda',
         }
         labels = {
