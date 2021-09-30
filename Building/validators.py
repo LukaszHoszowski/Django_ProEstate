@@ -1,10 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
-from django.utils.translation import ugettext as _
 
 
 class MaxSizeValidator(MaxValueValidator):
-    message = _('Twój plik przekracza maksymalny rozmiar pliku wynoszący %(limit_value) MB.')
+    message = ('Twój plik przekracza maksymalny rozmiar pliku wynoszący %(limit_value) MB.')
 
     def __call__(self, value):
         cleaned = self.clean(value.size)
