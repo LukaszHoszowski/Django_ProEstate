@@ -5,26 +5,19 @@
 
 {% block content %}
 
-
     <div class="container align-content-center">
-    <div class="row align-content-center">
-        <div class="col-sm">
+        <div class="row align-content-center">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <h2>Usuwanie profilu użytkownika</h2>
+                <br>
+                <form method="post">{% csrf_token %}
+                    <p>Czy jesteś pewien, że chcesz usunąć konto użytkownika "{{ object }}"?</p>
+                    <input class="btn btn-danger" type="submit" value="Potwierdź">
+                </form>
+            </div>
+            <div class="col-sm">
+            </div>
         </div>
-        <div class="col-sm">
-            <h2>Usuwanie profilu użytkownika</h2>
-            <br>
-            <form method="post">{% csrf_token %}
-                <p>Czy jesteś pewien, że chcesz usunąć konto użytkownika "{{ object }}"?</p>
-                <input class="btn btn-secondary" type="submit" value="Potwierdź">
-            </form>
-        </div>
-        <div class="col-sm">
-        </div>
-    </div>
 {% endblock content %}
-
-
-<form method="post">{% csrf_token %}
-    <p>Czy jesteś pewien, że chcesz usunąć konto użytkownika "{{ object }}"?</p>
-    <input type="submit" value="Potwierdź">
-</form>

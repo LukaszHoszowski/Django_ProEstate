@@ -46,7 +46,8 @@
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container-fluid w-75">
                 <a class="navbar-brand" href="{% url 'main' %}">
-                    <img src="https://www.svgrepo.com/show/3504/big-building.svg" alt="logo proEstate" width="60" height="60"
+                    <img src="https://www.svgrepo.com/show/3504/big-building.svg" alt="logo proEstate" width="60"
+                         height="60"
                          class="d-inline-block align-middle">
 
                     ProEstate</a>
@@ -55,21 +56,25 @@
                         aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'Building:buildings' %}">Budynki</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'User:contact_neighbour' %}?next={{ request.path|urlencode }}">Napisz do sasiada</a>
+                            <a class="nav-link"
+                               href="{% url 'User:contact_neighbour' %}?next={{ request.path|urlencode }}">Napisz do
+                                sasiada</a>
                         </li>
                         <li class="nav-item">
-                            <a class="text-danger nav-link" href="{% url 'User:report_failure' %}?next={{ request.path|urlencode }}">Zgłoś awarię</a>
+                            <a class="text-danger nav-link"
+                               href="{% url 'User:report_failure' %}?next={{ request.path|urlencode }}">Zgłoś awarię</a>
                         </li>
                     </ul>
                     {% if user.is_authenticated %}
 
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown d-flex flex-wrap align-items-center">
                             <a class="nav-link dropdown-toggle link-secondary" href="#"
                                id="navbarDarkDropdownMenuLink"
                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -78,9 +83,12 @@
                             <ul class="dropdown-menu dropdown-menu-dark"
                                 aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{% url 'User:profile' %}">Profil</a></li>
-                                <li><a class="dropdown-item" href="{% url 'User:profile_update' %}">Modyfikuj profil</a></li>
-                                <li><a class="dropdown-item text-warning" href="{% url 'User:pass_change' %}">Zmień hasło</a></li>
-                                <li><a class="dropdown-item text-danger" href="{% url 'User:delete_user' %}">Usuń konto</a></li>
+                                <li><a class="dropdown-item" href="{% url 'User:profile_update' %}">Modyfikuj profil</a>
+                                </li>
+                                <li><a class="dropdown-item text-warning" href="{% url 'User:pass_change' %}">Zmień
+                                    hasło</a></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'User:delete_user' %}">Usuń
+                                    konto</a></li>
                             </ul>
                         </li>
 
@@ -122,45 +130,27 @@
 
 <footer class="footer mt-auto py-6 bg-light">
     <div class="container text-secondary w-75">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-6">
-
-                        <p><b>proEstate</b></p>
-                        Wiejska 6 <br>
-                        Warszawa <br>
-                        50-518 <br>
-
-                    </div>
-                    <div class="col-md-6 px-4">
-                        <h6>Dowiedz się o nas więcej</h6>
-                        <br>
-                        <a href="#" class="btn-footer link-dark"> O firmie </a><br>
-                        <a href="#" class="btn-footer link-dark"> Napisz do nas</a>
-                    </div>
-                </div>
+        <div class="row m-3">
+            <div class="col-sm">
+                <small class="text-muted">
+                    <b>proEstate</b><br>
+                    Wiejska 6 | Warszawa | 50-518
+                    <br>
+                </small>
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-7 px-4">
-                        <h6>Telefony alarmowe</h6>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ul>
-                                    <li>997 Policja</li>
-                                    <li>998 Straż</li>
-                                    <li>999 Pogotowie</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <br>
-                                <h6><a href="mailto:pro3state@gmail.com" class="link-dark">Współpraca</a></h6>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+            <div class="col-sm">
+                <small class="text-muted">
+                    <a href="{% url 'about' %}" class="link-secondary"> O mnie </a><br>
+                    <a href="#" class="link-secondary"> Napisz do nas</a>
+                </small>
+            </div>
+            <div class="col-sm d-flex flex-wrap align-items-center">
+                <a href="https://github.com/LukaszHoszowski/Django_ProEstate" target="_blank">
+                    <img width="50px" height="50px" src="{% static 'github.png' %}" style="opacity: 0.5; margin-right: 20px;" alt="">
+                </a>
+                <a href="https://www.codewars.com/users/na1l71" target="_blank">
+                    <img width="50px" height="50px" src="{% static 'codewars.png' %}" style="opacity: 0.5; margin-right: 20px;" alt="">
+                </a>
             </div>
         </div>
     </div>
@@ -170,7 +160,7 @@
 <script src="{% static 'bootstrap.bundle.min.js' %}"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-<script>src="{% static 'app.js' %}"</script>
+<script>src = "{% static 'app.js' %}"</script>
 
 
 </body>

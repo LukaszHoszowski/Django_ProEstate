@@ -6,9 +6,10 @@
 
 {% block content %}
 
-    <h6><a href="{% url 'Building:building_details' flat.building.slug %}"
+    <ul><h6><a href="{% url 'Building:building_details' flat.building.slug %}"
            class="link-secondary"><i>{{ flat.building }}</i></a> / <i>
-        {{ flat.number }}{{ flat.number_suffix|default_if_none:'' }}</i></h6>
+        <a href="{% url 'Building:flat_update' flat.building.slug flat.pk %}" class="link-warning">
+            {{ flat.number }}{{ flat.number_suffix|default_if_none:'' }}</a></i></h6></ul>
     <br>
 
     <div class="row align-items-start">
@@ -24,6 +25,17 @@
             <ul>Ogrzewanie wody z CO:</ul>
             <br>
             <ul>Mieszkańcy:</ul>
+            <ul>{% if user not in flat.user.all %}
+                <form action="{% url 'Building:flat_add_user' pk=object.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Dopisz się do mieszkania" class="btn btn-success">
+                </form>
+            {% else %}
+                <form action="{% url 'Building:flat_delete_user' pk=object.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Opuść mieszkanie" class="btn btn-danger">
+                </form>
+            {% endif %}</ul>
         </div>
         <div class="col">
             <b>
@@ -61,12 +73,14 @@
                     {% endif %}
                 </ul>
                 <br>
-                {% for user in flat.profile_set.all %}
-                    <ul><b>{{ user|title }}</b></ul>
+                {% for user in flat.user.all %}
+                    <ul><b>{{ user.first_name|title }} {{ user.last_name|title }}</b></ul>
                 {% empty %}
                     <ul>Nie dodano jeszcze mieszkańców, <br><br>
-                        <a href="#" class="link-secondary">dodaj</a></ul>
+                    </ul>
+                    <br>
                 {% endfor %}
+
                 <br>
             </b>
         </div>

@@ -1,23 +1,28 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}proEstate - Tworzenie profilu{% endblock title %}
+{% block title %}proEstate - Dodawanie mieszkań{% endblock title %}
 
 {% block content %}
-    <h2>Dodawanie mieszkań</h2>
-    <br>
 
-{#    {% for building in buildings %}#}
-{#        <ul>{{ building }}</ul>#}
-{#    {% endfor %}#}
-
-    <form method="post">
-        {% csrf_token %}
-        <table>
-            {{ form|crispy }}
-        </table>
-        <input class="btn btn-secondary" type="submit" value="Dodaj">
-    </form>
+    <div class="container align-content-center">
+        <div class="row align-content-center">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <h2>Dodawanie mieszkań</h2>
+                <br>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <br>
+                    <input class="btn btn-secondary" type="submit" value="Dodaj">
+                </form>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+    </div>
 {% endblock content %}
 
 {# action="{% url 'Building:flat_update' slug=user.flat.building.slug pk=profile.flat.pk %}#}

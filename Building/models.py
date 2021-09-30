@@ -5,6 +5,7 @@ from django.utils.text import slugify
 
 from Building.validators import MaxSizeValidator
 
+
 NUMBER_SUFFIX = [
     ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'), ('G', 'G'), ('H', 'H'), ('I', 'I'),
     ('J', 'J'), ('K', 'K'), ('L', 'L'), ('M', 'M')
@@ -163,7 +164,7 @@ class HousingCooperative(models.Model):
     city = models.CharField(max_length=100, null=True, verbose_name='Miasto')
     zip_code = models.CharField(max_length=6, null=True, verbose_name='Kod pocztowy')
     logo = models.ImageField(upload_to='images/coop_logo/', null=True, blank=True,
-                             verbose_name='Logotyp zarzadcy/wspólnoty')
+                             verbose_name='Logotyp zarządcy/wspólnoty')
     email = models.EmailField(max_length=254, null=True, verbose_name='Email')
     phone = models.CharField(max_length=12, null=True, verbose_name='Nr telefonu')
     website = models.URLField(blank=True)
@@ -192,7 +193,8 @@ class Flat(models.Model):
     electricity = models.BooleanField(default=True, verbose_name='Prąd')
     water = models.BooleanField(default=True, verbose_name='Woda')
     building = models.ForeignKey('Building', on_delete=models.CASCADE, verbose_name='Budynek')
-    slug = models.SlugField(null=False, unique=True)
+    user = models.ManyToManyField(User, blank=True)
+    slug_flat = models.SlugField(null=False, unique=True)
 
     def __str__(self):
         return f'{self.building}/{self.number}{self.number_suffix if self.number_suffix else ""}'
