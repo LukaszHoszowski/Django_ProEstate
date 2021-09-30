@@ -6,10 +6,10 @@
 
 {% block content %}
 
-    <h6><a href="{% url 'Building:building_details' flat.building.slug %}"
+    <ul><h6><a href="{% url 'Building:building_details' flat.building.slug %}"
            class="link-secondary"><i>{{ flat.building }}</i></a> / <i>
         <a href="{% url 'Building:flat_update' flat.building.slug flat.pk %}" class="link-warning">
-            {{ flat.number }}{{ flat.number_suffix|default_if_none:'' }}</a></i></h6>
+            {{ flat.number }}{{ flat.number_suffix|default_if_none:'' }}</a></i></h6></ul>
     <br>
 
     <div class="row align-items-start">
@@ -25,7 +25,7 @@
             <ul>Ogrzewanie wody z CO:</ul>
             <br>
             <ul>Mieszkańcy:</ul>
-            {% if user not in flat.user.all %}
+            <ul>{% if user not in flat.user.all %}
                 <form action="{% url 'Building:flat_add_user' pk=object.pk %}" method="post">
                     {% csrf_token %}
                     <input type="submit" value="Dopisz się do mieszkania" class="btn btn-success">
@@ -35,7 +35,7 @@
                     {% csrf_token %}
                     <input type="submit" value="Opuść mieszkanie" class="btn btn-danger">
                 </form>
-            {% endif %}
+            {% endif %}</ul>
         </div>
         <div class="col">
             <b>

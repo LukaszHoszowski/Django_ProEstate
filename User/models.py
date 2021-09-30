@@ -12,7 +12,7 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
     token = models.CharField(max_length=100, default=None, blank=True, null=True)
-    avatar = models.ImageField(upload_to='images/avatars/', null=True, blank=True,
+    avatar = models.ImageField(upload_to='images/avatars/', default='static/user.png', null=True, blank=True,
                                verbose_name='Avatar użytkownika')
 
     @property

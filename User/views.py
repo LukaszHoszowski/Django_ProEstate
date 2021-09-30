@@ -17,6 +17,16 @@ from User.models import Profile
 from proestate.settings import EMAIL_HOST_USER
 
 
+class MainView(View):
+    def get(self, request):
+        return render(request, 'main.html')
+
+
+class AboutView(View):
+    def get(self, request):
+        return render(request, 'about.html')
+
+
 class SignUpView(CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('User:profile_create_additional')
@@ -47,9 +57,8 @@ class FlatUserUpdateView(LoginRequiredMixin, View):
 
     def post(self, request):
         form = ProfileFlatForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
 
+        if form.is_valid():
             flat = Flat.objects.get(id=form['flat'].value())
             flat.user.add(request.user)
             flat.save()
@@ -103,11 +112,6 @@ class DeleteUser(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         return self.request.user
-
-
-class MainView(View):
-    def get(self, request):
-        return render(request, 'main.html')
 
 
 class ReportFailureView(LoginRequiredMixin, View):
