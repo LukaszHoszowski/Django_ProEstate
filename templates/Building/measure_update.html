@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}proEstate - Edycja wskazań liczników{% endblock title %}
+
+{% block content %}
+    <div class="container align-content-center">
+        <div class="row align-content-center">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <form method="post" action="">
+                {% csrf_token %}
+                {{ form | crispy }}
+                <div class="p-3">
+                    <input class="btn btn-secondary" type="submit" value="Zapisz">
+                </div>
+            </form>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

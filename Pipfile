@@ -10,7 +10,12 @@ django-environ = "0.7.0"
 django-crispy-forms = "1.13.0"
 crispy-bootstrap5 = "0.5"
 pillow = "8.3.2"
-django-pytest = "0.2.0"
+pytest = "*"
+pytest-django = "*"
+factory-boy = "*"
+faker = "*"
+pytest-factoryboy = "*"
+selenium = "*"
 
 [dev-packages]
 

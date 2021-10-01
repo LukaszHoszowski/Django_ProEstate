@@ -12,7 +12,9 @@ from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 
 from Building.models import Flat
 from User.forms import SignUpForm, ProfileFormAdditional, ReportFailureForm, ContactNeighbourForm, \
-    ProfileUpdateForm, ProfileFlatForm
+    ProfileUpdateForm, ProfileFlatForm, ContactUsForm
+from User.user_helper_functions import create_email_subject_neighbour, create_email_message_neighbour, \
+    create_email_subject_failure, create_email_message_failure
 from User.models import Profile
 from proestate.settings import EMAIL_HOST_USER
 
@@ -42,7 +44,7 @@ class SignUpView(CreateView):
 
 class ProfileCreateAdditionalView(LoginRequiredMixin, CreateView):
     form_class = ProfileFormAdditional
-    success_url = reverse_lazy('User:profile_creation_flat')
+    success_url = reverse_lazy('User:profile_create_flat')
     template_name = 'User/profile_create_additional.html'
 
     def form_valid(self, form):
@@ -123,14 +125,18 @@ class ReportFailureView(LoginRequiredMixin, View):
         form = ReportFailureForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            subject = f"Zgłoszenie awarii - {cd['failure_building']} - {cd['failure_type']}"
+
+            subject = create_email_subject_failure(cd['failure_building'], cd['failure_type'])
+
             message = cd['message']
-            message += f"""
-użytkownik:     {self.request.user.first_name} {self.request.user.last_name} / {self.request.user.email} / {self.request.user}
-budynek:        {cd['failure_building']}
-mieszkanie:     {self.request.user.flat_set.first()}
-typ awarii:     {cd['failure_type']}
-            """
+            message += create_email_message_failure(self.request.user.first_name,
+                                                    self.request.user.last_name,
+                                                    self.request.user.email,
+                                                    self.request.user,
+                                                    self.request.user.flat_set.first(),
+                                                    cd['failure_building'],
+                                                    cd['failure_type'])
+
             send_mail(subject, message, EMAIL_HOST_USER, [EMAIL_HOST_USER])
         else:
             form = ReportFailureForm()
@@ -154,19 +160,15 @@ class ContactNeighbourView(LoginRequiredMixin, View):
             recipients_query = Profile.objects.filter(user__flat=form['flat'].value())
             recipients = [recipient.user.email for recipient in recipients_query]
 
-            subject = f"Prośba o kontakt od użytkownika {self.request.user.first_name} {self.request.user.last_name} ({self.request.user})"
+            subject = create_email_subject_neighbour(self.request.user.first_name, self.request.user.last_name,
+                                                     self.request.user)
 
-            message = f"""Witam,
-            
-Jestem Państwa sąsiadem z mieszkania {self.request.user.flat_set.first()}. 
-Bardzo proszę o kontakt pod poniższym numerem telefonu lub przez pocztę elektroniczną:
+            message = create_email_message_neighbour(self.request.user.flat_set.first(),
+                                                     self.request.user.profile.phone_number,
+                                                     self.request.user.email, self.request.user.first_name,
+                                                     self.request.user.last_name,
+                                                     self.request.user.profile.contact_flag)
 
-Telefon: {self.request.user.profile.phone_number}
-Email: {self.request.user.email} 
-
-Z góry dziękuję i pozdrawiam,
-{self.request.user.first_name.title()} {self.request.user.last_name.title()}
- """
             send_mail(subject, message, EMAIL_HOST_USER, recipients)
         else:
             form = ContactNeighbourForm()
@@ -176,3 +178,31 @@ Z góry dziękuję i pozdrawiam,
 
         next = request.POST.get('next', '/')
         return HttpResponseRedirect(next)
+
+
+class ContactUsView(View):
+    def get(self, request):
+        form = ContactUsForm()
+        return render(request, 'contact_us.html', {'form': form})
+
+    def post(self, request):
+        form = ContactUsForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+
+            subject = 'Mail z proEstate'
+
+            message = cd['message']
+            message += f'''
+            
+            Mail od {cd["email"]}
+            '''
+
+            send_mail(subject, message, EMAIL_HOST_USER, [EMAIL_HOST_USER])
+        else:
+            form = ReportFailureForm()
+            return render(request, 'contact_us.html', {
+                'form': form,
+            })
+
+        return redirect('main')

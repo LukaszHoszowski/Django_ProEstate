@@ -79,7 +79,6 @@ class ReportFailureForm(forms.Form):
 
     failure_building = forms.ModelChoiceField(queryset=Building.objects.all(), label='',
                                               empty_label='Wybierz budynek którego dotyczy awaria', required=False)
-    failure_flat = forms.CheckboxInput()
     failure_type = forms.ChoiceField(choices=FAILURES, label='', required=False)
     message = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Treść wiadomości'}))
 
@@ -88,3 +87,8 @@ class ContactNeighbourForm(forms.Form):
     flat = forms.ModelChoiceField(queryset=Flat.objects.all(), label='', empty_label='Wybierz sąsiada',
                                   required=True,
                                   help_text="Po kliknięciu WYŚLIJ, Twoje dane kontaktowe zostaną przekazane mieszkańcom wybranego lokalu.")
+
+
+class ContactUsForm(forms.Form):
+    email = forms.EmailField(label='', help_text='Twój email')
+    message = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Treść wiadomości'}))

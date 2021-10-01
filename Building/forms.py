@@ -1,9 +1,6 @@
 from django import forms
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 
-from Building.models import Building, Flat, BuildingPhotos, BuildingDocs
-from User.models import Profile
+from Building.models import Building, Flat, BuildingPhotos, BuildingDocs, Measure
 
 
 class BuildingPhotosForm(forms.ModelForm):
@@ -50,5 +47,21 @@ class FlatUpdateForm(forms.ModelForm):
             'water_heating': '',
             'natural_gas': '',
             'electricity': '',
+            'water': '',
+        }
+
+
+class MeasureUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Measure
+        exclude = ['flat', 'payment_period']
+        help_texts = {
+            'gas': 'podaj wskazania gazomierza',
+            'energy': 'podaj wskazania licznika energii elektrycznej',
+            'water': 'podaj wskazania wodomierza',
+        }
+        labels = {
+            'gas': '',
+            'energy': '',
             'water': '',
         }
