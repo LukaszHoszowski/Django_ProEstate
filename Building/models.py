@@ -94,7 +94,7 @@ class Building(models.Model):
     def generate_flats(self):
         for flat_no in range(self.no_of_flats):
             Flat.objects.create(number=flat_no + 1, building=self,
-                                slug=slugify(f'{self.street}-{self.number}-{flat_no + 1}'))
+                                slug_flat=slugify(f'{self.street}-{self.number}-{flat_no + 1}'))
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
