@@ -60,7 +60,7 @@ def app_user_factory(db):
     return create_app_user
 
 
-@pytest.fixture
+@pytest.fixture(scope='function')
 def app_user_profile_factory(db):
     def create_app_user_profile(
             user: User,
@@ -110,10 +110,11 @@ def get_image(name='test.png', ext='png', size=(50, 50), color=(256, 0, 0)):
     file_obj.seek(0)
     return File(file_obj, name=name)
 
+
 @pytest.fixture(scope='function')
 def payment_period_helper(db):
     for x in range(12):
-        PaymentPeriod.objects.create(month=x+1, year=1)
+        PaymentPeriod.objects.create(month=x + 1, year=1)
 
 
 @pytest.fixture(scope='function')
@@ -125,9 +126,8 @@ def app_building_factory(db):
             city: str = 'Wrocław',
             zip_code: str = "50-518",
             slug: str = 'jesionowa-10',
-            picture = get_image()
+            picture=get_image()
     ) -> Building:
-
         building = Building.objects.create(
             street=street,
             number=number,
@@ -150,7 +150,6 @@ def app_cartography_factory(db):
             parcel_precinct: int = 1,
             parcel_number: str = '86'
     ) -> Cartography:
-
         carto = Cartography.objects.create(
             building=building,
             parcel_identification_number=parcel_identification_number,
@@ -172,7 +171,7 @@ def app_coop_factory(db):
             zip_code: str = '50-518',
             email: str = 'op@op.pl',
             phone: str = '793454606',
-            logo = get_image()
+            logo=get_image()
     ) -> HousingCooperative:
         coop = HousingCooperative.objects.create(
             name=name,
@@ -187,7 +186,6 @@ def app_coop_factory(db):
         return coop
 
     return create_housing_cooperative()
-
 
 
 # Selenium
