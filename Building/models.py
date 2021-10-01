@@ -5,7 +5,6 @@ from django.utils.text import slugify
 
 from Building.validators import MaxSizeValidator
 
-
 NUMBER_SUFFIX = [
     ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F', 'F'), ('G', 'G'), ('H', 'H'), ('I', 'I'),
     ('J', 'J'), ('K', 'K'), ('L', 'L'), ('M', 'M')
@@ -50,34 +49,6 @@ PAYMENT_YEARS = [
     (1, "2021"),
     (2, "2022")
 ]
-
-
-class PaymentPeriod(models.Model):
-    month = models.SmallIntegerField(choices=PAYMENT_MONTHS, verbose_name='Miesiąc rozliczeniowy')
-    year = models.SmallIntegerField(choices=PAYMENT_YEARS, verbose_name='Rok rozliczeniowy')
-
-    def __str__(self):
-        return f'{self.get_year_display()} - {self.get_month_display()}'
-
-    class Meta:
-        ordering = ('year', '-month')
-        verbose_name = 'Okres rozliczeniowy'
-        verbose_name_plural = 'Okresy rozliczeniowe'
-
-
-class Measure(models.Model):
-    gas = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Gaz')
-    energy = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Prąd')
-    water = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Woda')
-    payment_period = models.ForeignKey('PaymentPeriod', on_delete=models.CASCADE, verbose_name='Okres rozliczeniowy')
-    flat = models.ForeignKey('Flat', on_delete=models.CASCADE, null=True, blank=True, verbose_name='Mieszkanie')
-
-    def __str__(self):
-        return f'{self.flat} - {self.payment_period}'
-
-    class Meta:
-        verbose_name = 'Wskazania licznika'
-        verbose_name_plural = 'Wskazania liczników'
 
 
 class Building(models.Model):
@@ -200,7 +171,7 @@ class Flat(models.Model):
         return f'{self.building}/{self.number}{self.number_suffix if self.number_suffix else ""}'
 
     def get_absolute_url(self):
-        return reverse('Building:flat_details', kwargs={'slug': self.building.slug,  'pk': self.pk})
+        return reverse('Building:flat_details', kwargs={'slug': self.building.slug, 'pk': self.pk})
 
     class Meta:
         ordering = ['building', 'number']
@@ -219,3 +190,31 @@ class Flat(models.Model):
                      update_fields)
         if creation:
             self.generate_measure_placeholders()
+
+
+class PaymentPeriod(models.Model):
+    month = models.SmallIntegerField(choices=PAYMENT_MONTHS, verbose_name='Miesiąc rozliczeniowy')
+    year = models.SmallIntegerField(choices=PAYMENT_YEARS, verbose_name='Rok rozliczeniowy')
+
+    def __str__(self):
+        return f'{self.get_year_display()} - {self.get_month_display()}'
+
+    class Meta:
+        ordering = ('year', '-month')
+        verbose_name = 'Okres rozliczeniowy'
+        verbose_name_plural = 'Okresy rozliczeniowe'
+
+
+class Measure(models.Model):
+    gas = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Gaz')
+    energy = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Prąd')
+    water = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True, verbose_name='Woda')
+    payment_period = models.ForeignKey('PaymentPeriod', on_delete=models.CASCADE, verbose_name='Okres rozliczeniowy')
+    flat = models.ForeignKey('Flat', on_delete=models.CASCADE, null=True, blank=True, verbose_name='Mieszkanie')
+
+    def __str__(self):
+        return f'{self.flat} - {self.payment_period}'
+
+    class Meta:
+        verbose_name = 'Wskazania licznika'
+        verbose_name_plural = 'Wskazania liczników'

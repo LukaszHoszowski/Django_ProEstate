@@ -5,7 +5,7 @@ def create_email_subject_neighbour(first_name, last_name, username):
     return f"Prośba o kontakt od użytkownika {first_name} {last_name} ({username})"
 
 
-def create_email_message_neighbour(flat, phone, email, first_name, last_name):
+def create_email_message_neighbour(flat, phone, email, first_name, last_name, contact_flag):
     if first_name is None or \
             last_name is None or \
             flat is None or \
@@ -18,7 +18,7 @@ def create_email_message_neighbour(flat, phone, email, first_name, last_name):
 Jestem Państwa sąsiadem z mieszkania {flat}. 
 Bardzo proszę o kontakt pod poniższym numerem telefonu lub przez pocztę elektroniczną:
 
-Telefon: {phone}
+Telefon: {phone if contact_flag == True else 'Użytkownik nie wyraził zgody na udostępnienie nr telefonu'}
 Email: {email} 
 
 Z góry dziękuję i pozdrawiam,

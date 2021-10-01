@@ -166,7 +166,8 @@ class ContactNeighbourView(LoginRequiredMixin, View):
             message = create_email_message_neighbour(self.request.user.flat_set.first(),
                                                      self.request.user.profile.phone_number,
                                                      self.request.user.email, self.request.user.first_name,
-                                                     self.request.user.last_name)
+                                                     self.request.user.last_name,
+                                                     self.request.user.profile.contact_flag)
 
             send_mail(subject, message, EMAIL_HOST_USER, recipients)
         else:

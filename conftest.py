@@ -9,16 +9,16 @@ from User.tests.factories import UserFactory
 register(UserFactory)
 
 
-@pytest.fixture(scope='function')
-def func():
-    print("before testcase")
-    yield 10
-    print("after testcase")
-
-
-@pytest.fixture(scope='function')
-def test_password():
-    return 'Testpass123'
+# @pytest.fixture(scope='function')
+# def func():
+#     print("before testcase")
+#     yield 10
+#     print("after testcase")
+#
+#
+# @pytest.fixture(scope='function')
+# def test_password():
+#     return 'Testpass123'
 
 
 @pytest.fixture(scope='function')
