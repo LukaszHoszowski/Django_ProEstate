@@ -50,8 +50,9 @@ def test_email_create_neighbour_message():
     email = 'kermit@hotmail.com'
     first_name = 'kermit'
     last_name = 'defrog'
+    contact_flag = True
 
-    message = create_email_message_neighbour(flat, phone, email, first_name, last_name)
+    message = create_email_message_neighbour(flat, phone, email, first_name, last_name, contact_flag)
 
     correct_message = """Witam,
 
@@ -68,12 +69,38 @@ Kermit Defrog
     assert correct_message == message
 
 
+def test_email_create_neighbour_message_flag_false():
+    flat = 'Sesame Street 103/3'
+    phone = 89175852986
+    email = 'kermit@hotmail.com'
+    first_name = 'kermit'
+    last_name = 'defrog'
+    contact_flag = False
+
+    message = create_email_message_neighbour(flat, phone, email, first_name, last_name, contact_flag)
+
+    correct_message = """Witam,
+
+Jestem Państwa sąsiadem z mieszkania Sesame Street 103/3. 
+Bardzo proszę o kontakt pod poniższym numerem telefonu lub przez pocztę elektroniczną:
+
+Telefon: Użytkownik nie wyraził zgody na udostępnienie nr telefonu
+Email: kermit@hotmail.com 
+
+Z góry dziękuję i pozdrawiam,
+Kermit Defrog
+     """
+
+    assert correct_message == message
+
+
 def test_email_create_neighbour_message_with_incorrect_data():
     flat = 'Sesame Street 103/3'
     phone = 89175852986
     email = None
     first_name = 'kermit'
     last_name = 'defrog'
+    contact_flag = True
 
     correct_message = """Witam,
 
@@ -88,7 +115,7 @@ Kermit Defrog
      """
 
     with pytest.raises(ValueError) as context:
-        create_email_message_neighbour(flat, phone, email, first_name, last_name)
+        create_email_message_neighbour(flat, phone, email, first_name, last_name, contact_flag)
 
     assert 'Wrong user data' in str(context.value)
 

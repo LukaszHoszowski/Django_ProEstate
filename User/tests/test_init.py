@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.mark.slow
+@pytest.mark.skip
 def test_if_works():
     print('inside testcase')
     assert 10 == 10

@@ -15,3 +15,5 @@ def test_view_profile(create_user, test_password, client):
 
     assert response.status_code == 200
     assert user.username in response.content.decode('UTF-8')
+
+

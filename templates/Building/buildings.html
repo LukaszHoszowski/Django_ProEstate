@@ -7,16 +7,37 @@
         <div class="row">
             {% for building in buildings %}
                 <div class="col-sm">
-                    <div class="text-left fw-bold">{{ building|upper }}</div>
-                    <br>
-                    <a href="{% url 'Building:building_details' building.slug %}" class="link-secondary text-left">
-                        <img src="{{ building.picture.url|default_if_none:"brak zdjęcia" }}" class="rounded-3 float img-fluid"
-                             style="max-width: 200px; height: auto;" alt="budynek">
-                    </a>
-                    <br>
-                    <br>
-                    <div class="text-left"><i>Miasto: </i> <b>{{ building.city }}</b></div>
-                    <div class="text-left"><i>Kod: </i> <b>{{ building.zip_code }}</b></div>
+                    <div class="card align-items-center" style="width: 230px; height: 200px">
+
+                        <a href="{% url 'Building:building_details' building.slug %}" class="link-secondary text-left">
+                            <img src="{{ building.picture.url|default_if_none:"brak zdjęcia" }}"
+                                 class="card-img-top"
+                                 style="max-width: 200px; height: auto;" alt="budynek">
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <h5 class="card-title">{{ building|upper }}</h5>
+                                <div class="card-text"><i>Miasto: </i> <b>{{ building.city }}</b></div>
+                                <div class="card-text"><i>Kod: </i> <b>{{ building.zip_code }}</b></div>
+                            </p>
+                        </div>
+
+                    </div>
+
+
+{#                    <div class="">#}
+{#                        <div class="text-left fw-bold">{{ building|upper }}</div>#}
+{#                        <br>#}
+{#                        <a href="{% url 'Building:building_details' building.slug %}" class="link-secondary text-left">#}
+{#                            <img src="{{ building.picture.url|default_if_none:"brak zdjęcia" }}"#}
+{#                                 class="rounded-3 float img-fluid"#}
+{#                                 style="max-width: 200px; height: auto;" alt="budynek">#}
+{#                        </a>#}
+{#                        <br>#}
+{#                        <br>#}
+{#                        <div class="text-left"><i>Miasto: </i> <b>{{ building.city }}</b></div>#}
+{#                        <div class="text-left"><i>Kod: </i> <b>{{ building.zip_code }}</b></div>#}
+{#                    </div>#}
                 </div>
             {% endfor %}
         </div>

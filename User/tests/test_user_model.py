@@ -9,11 +9,19 @@ def test_user_create():
     assert count == 1
 
 
-@pytest.mark.django_db
-def test_check_set_user_password():
-    user = User.objects.create_user('test')
-    user.set_password('new_password')
-    assert user.check_password('new_password') is True
+def test_should_check_password(db, user_A: User) -> None:
+    user_A.set_password("secret")
+    assert user_A.check_password("secret") is True
+
+
+def test_should_not_check_unusable_password(db, user_A: User) -> None:
+    user_A.set_password("secret")
+    user_A.set_unusable_password()
+    assert user_A.check_password("secret") is False
+
+
+def test_should_create_two_users(user_A: User, user_B: User) -> None:
+    assert user_A.pk != user_B.pk
 
 
 @pytest.mark.parametrize(
