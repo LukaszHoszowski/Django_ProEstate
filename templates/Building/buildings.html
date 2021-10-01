@@ -7,7 +7,7 @@
         <div class="row">
             {% for building in buildings %}
                 <div class="col-sm">
-                    <div class="card align-items-center" style="width: 230px; height: 200px">
+                    <div class="card align-items-center" style="width: auto; height: auto">
 
                         <a href="{% url 'Building:building_details' building.slug %}" class="link-secondary text-left">
                             <img src="{{ building.picture.url|default_if_none:"brak zdjęcia" }}"
